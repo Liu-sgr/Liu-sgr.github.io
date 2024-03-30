@@ -9,7 +9,7 @@
     <meta http-equiv="Cache-Control" content="no-siteapp">
     <title>
         
-            移植ubuntu
+            个人笔记
         
     </title>
     <link rel="shortcut icon" href="#"/>
@@ -37,7 +37,7 @@
     <div class="vertical">
         <div class="inner">
             
-                <h1 class="header-subtitle">移植ubuntu</h1>
+                <h1 class="header-subtitle">个人笔记</h1>
                 <div class="header-subinfo">
                     <p class="article-info-text">
                         <span>
@@ -45,25 +45,25 @@
                         </span>
                         
                             
-                                <span id="/posts/2867551922.html" class="leancloud_visitors" data-flag-title="移植ubuntu">
+                                <span id="/posts/524123629.html" class="leancloud_visitors" data-flag-title="个人笔记">
                                     <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
                                 </span>
                             
                             
                                 <span>
-                                    <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/posts/2867551922.html"></span>
+                                    <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/posts/524123629.html"></span>
                                 </span>
                               
                         
                     </p>
                     
                         
-                            <span class="category-color">移植</span>
+                            <span class="category-color">常识</span>
                         
                     
                     
                         
-                            <span class="tag-color">移植ubuntu</span>
+                            <span class="tag-color">个人笔记</span>
                         
                     
                 </div>
@@ -78,57 +78,320 @@
         <div id="article">
             <div class="toc"></div>
             <div class="article-body">
-                <h2 id="ubuntu下载"><a href="#ubuntu下载" class="headerlink" title="ubuntu下载"></a>ubuntu下载</h2><p>选择 <a target="_blank" rel="noopener" href="https://cdimage.ubuntu.com/">ubuntu-base -arm64</a></p>
-<h2 id="ubuntu-编译"><a href="#ubuntu-编译" class="headerlink" title="ubuntu 编译"></a>ubuntu 编译</h2><p>解压ubuntu-base-20.04.3-base-arm64.tar.gz</p>
-<p>进入ubuntu-base-20.04.3-base-arm64 </p>
-<p>添加fstab文件到etc&#x2F; 内容：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">proc		/proc		proc	defaults	<span class="number">0</span>	<span class="number">0</span></span><br><span class="line">sysfs		/sys		sysfs	defaults	<span class="number">0</span>	<span class="number">0</span></span><br><span class="line">tmpfs		/dev		tmpfs	defaults	<span class="number">0</span>	<span class="number">0</span></span><br></pre></td></tr></table></figure>
+                <h2 id="基础指令"><a href="#基础指令" class="headerlink" title="基础指令"></a>基础指令</h2><ul>
+<li><p>broadcast—广播</p>
+</li>
+<li><p>uname -r—查看内核版本</p>
+</li>
+<li><p>uname -m—查看处理器架构</p>
+</li>
+<li><p>scp -r <a href="mailto:&#101;&#x62;&#x61;&#105;&#x6e;&#97;&#64;&#x31;&#57;&#x32;&#46;&#x31;&#x36;&#56;&#46;&#x38;&#46;&#x32;&#50;&#x39;">&#101;&#x62;&#x61;&#105;&#x6e;&#97;&#64;&#x31;&#57;&#x32;&#46;&#x31;&#x36;&#56;&#46;&#x38;&#46;&#x32;&#50;&#x39;</a>:~&#x2F;rockchip&#x2F;update.img .&#x2F;</p>
+</li>
+<li><p>i2cdetect -r -y 1—总线设备上设备查询</p>
+</li>
+<li><p>lsblk -f &#x2F;dev&#x2F;sdb—查看文件格式</p>
+</li>
+<li><p>nautilus $PWD—图像界面打开文件夹位置</p>
+</li>
+<li><p>tar -cvf 文件名.tar 目标文件&#x2F;目录up</p>
+</li>
+<li><p>tar -czvf 文件名.tar.gz 目标文件&#x2F;目录</p>
+</li>
+<li><p>tar -cjvf 文件名.tar.bz2 目标文件&#x2F;目录</p>
+</li>
+<li><p>zip -r 压缩文件名.zip 目标文件&#x2F;目录</p>
+</li>
+<li><p>unzip file.zip -d &#x2F;path&#x2F;to&#x2F;destination</p>
+</li>
+<li><p>setenv serverip 192.168.102.7</p>
+</li>
+<li><p>setenv ipaddr 192.168.102.0</p>
+</li>
+<li><p>setenv netmask 255.255.255.0</p>
+</li>
+<li><p>setenv gatewayip 192.168.102.1</p>
+</li>
+<li><p>mount -t nfs -o nolock 192.168.100.58:&#x2F;opt&#x2F;rootfs &#x2F;mnt</p>
+</li>
+<li><p>evince PDF文件—打开Linux下的PDF文件</p>
+</li>
+<li><p>xdg-open code.png—打开Linux下的.png图片</p>
+</li>
+<li><p>sudo gedit 文件—以记事本方式打开文件内容</p>
+</li>
+<li><p>sudo &#x2F;etc&#x2F;init.d&#x2F;nfs-kernel-server restart（status）—重启nfs服务器</p>
+</li>
+<li><p>dmesg | grep 415—打印缓存区内容</p>
+</li>
+<li><p>ps -aux （ps -e）是一个常用的命令，用于显示当前系统上运行的所有进程的详细信息</p>
+</li>
+<li><p>.mk 文件通常用于程序的自动化构建和编译，而 .conf 文件通常用于程序的配置参数存储</p>
+</li>
+<li><p>ADB模式（Android Debug Bridge Mode）是一种特殊模式，用于在Android设备与计算机之间建立调试和通信连接</p>
+</li>
+<li><p>Loader模式是一种引导模式，用于在Android设备上加载引导程序（bootloader）。引导程序是设备启动时的第一个程序，负责加载操作系统和其他核心组件</p>
+</li>
+<li><p>Maskrom模式，它会进入一个特殊的硬件状态，允许在设备上直接刷写固件（firmware）</p>
+</li>
+<li><p>当您插入 TF 卡时，操作系统会首先检测和识别 TF 卡，并分配一个设备文件（如 &#x2F;dev&#x2F;sdX 或 &#x2F;dev&#x2F;mmcblkX）。然后，系统会将该设备文件与指定的挂载点（如 &#x2F;mnt&#x2F;extsd&#x2F;）关联起来，实现对 TF 卡的访问</p>
+</li>
+<li><p>hexdump</p>
+</li>
+<li><p>hwclock</p>
+</li>
+<li><p>hwclock -w</p>
+</li>
+<li><p>data -s “YYYY-MM-NN SS:FF:OO”</p>
+</li>
+<li><p>df</p>
+</li>
+<li><p>mount</p>
+</li>
+<li><p>cat &#x2F;sys&#x2F;kernel&#x2F;debug&#x2F;gpio</p>
+</li>
+<li><p>mount -t debugfs debugfs &#x2F;sys&#x2F;kernel&#x2F;debug</p>
+</li>
+<li><p>wpa_supplicant -iwlan0 -c &#x2F;etc&#x2F;wpa_supplicant.conf &amp;</p>
+</li>
+<li><p>ps -e | grep wpa_supplicant | awk ‘{print $1}’</p>
+</li>
+<li><p>make show-targets—查看当前buildroot所有配置了的目标软件包，也就是packages</p>
+</li>
+<li><p>strings &#x2F;usr&#x2F;bin&#x2F;rknn_server | grep build—查看rknn-server版本</p>
+</li>
+<li><p>strings &#x2F;usr&#x2F;lib&#x2F;librknn_runtime.so | grep version—查看librknn_runtime版本</p>
+</li>
+<li><p>cat &#x2F;proc&#x2F;meminfo—查看系统内存信息</p>
+</li>
+<li><p>vmstat—用于报告系统的虚拟内存统计信息</p>
+</li>
+<li><p>top</p>
+</li>
+<li><p>pmap—用于显示进程的内存映射（pmap  <pid>）</p>
+</li>
+<li><p>while true; do pmap -x pid | tail -1; sleep 1; done—-只显示最后一行，循环显示最后一行，达到监控该进程的目的</p>
+</li>
+<li><p>tail -n 20 test.log—查看最后20行</p>
+</li>
+<li><p>tail -f test.log—终端实时监测test.log文件的刷新</p>
+</li>
+<li><p>tail -1 [file]—仅显示最后一行</p>
+</li>
+<li><p>ls &#x2F;proc&#x2F;device-tree</p>
+</li>
+<li><p>cat &#x2F;proc&#x2F;interrupts—查看配置的中断资源</p>
+</li>
+<li><p>ls &#x2F;sys&#x2F;devices&#x2F;platform</p>
+</li>
+<li><p>bash shell中的<code>for</code>循环，用于创建一系列符号链接：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> file in riscv32-linux-musl-*; <span class="keyword">do</span></span><br><span class="line">    sudo ln -s <span class="string">&quot;$file&quot;</span> <span class="string">&quot;riscv32-cfg5-musl-20211008-elf-$&#123;file#riscv32-linux-musl-&#125;&quot;</span>;</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line">$&#123;file#riscv32-linux-musl-&#125;一种字符串截断操作，去除了文件名中的 <span class="string">&quot;riscv32-linux-musl-&quot;</span> 部分</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>sudo apt-get install open-vm-tools-desktop -y—安装vmtools可拖出文件到桌面</p>
+</li>
+<li><p>readelf -d 动态文件 | grep NEEDED—查看所需动态库</p>
+</li>
+<li><p>ldd 动态文件—查看所需动态库</p>
+</li>
+<li><p>file 文件–查看文件类型</p>
+</li>
+<li><p>cat &#x2F;sys&#x2F;kernel&#x2F;debug&#x2F;pinctrl&#x2F;pinctrl-rockchip-pinctrl&#x2F;pinmux-pins—命令查看 I&#x2F;O 复用状态</p>
+</li>
+<li><p>cat &#x2F;etc&#x2F;os-release—Ubuntu操作系统的版本</p>
+</li>
+<li><p>lsb_release -a—Ubuntu操作系统的版本</p>
+</li>
+<li><p>strings &#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;libc.so.6 |<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=grep&spm=1001.2101.3001.7020">grep</a> GLIBC_—检查glibc版本</p>
+</li>
+<li><p>echo fs.inotify.max_user_watches&#x3D;524288 | sudo tee -a &#x2F;etc&#x2F;sysctl.conf &amp;&amp; sudo sysctl -p</p>
+<p>用于在Linux系统上增加每个用户允许的inotify监视器的最大数量。Inotify监视器用于监视文件系统事件</p>
+</li>
+</ul>
+<h2 id="基础常识"><a href="#基础常识" class="headerlink" title="基础常识"></a>基础常识</h2><p><a target="_blank" rel="noopener" href="http://releases.ubuntu.com/18.04/">Ubuntu 18.04 镜像下载链接</a></p>
+<p><a target="_blank" rel="noopener" href="http://cdimage.ubuntu.com/">ubuntu根文件系统下载链接</a></p>
+<p>openssh:</p>
+<p>​		<a target="_blank" rel="noopener" href="http://www.zlib.net/">zlib官方下载</a></p>
+<p>​		<a target="_blank" rel="noopener" href="http://www.openssl.org/source">openssl官方下载</a></p>
+<p>​		<a target="_blank" rel="noopener" href="http://www.openssh.com/portable.html">openssh官网下载</a></p>
+<p>mtd-utils:</p>
+<p><a target="_blank" rel="noopener" href="http://www.linux-mtd.infradead.org/">mtd-utilsa官方下载</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.oberhumer.com/opensource/lzo/download/">lzo官方下载</a></p>
+<p>Segmentation fault (core dumped)—的意思是分段错误（核心已转储）</p>
+<p>out of memery—物理内存不够用</p>
+<p>UART波特率的计算公式为：UART波特率 &#x3D; 工作时钟源 &#x2F; 内部分频系数 &#x2F; 16</p>
+<p>摄像头分辨率：1920x1080(1080p) , 2560×1440（2K） , 3840×2160（4K）</p>
+<h2 id="更换下载源"><a href="#更换下载源" class="headerlink" title="更换下载源"></a>更换下载源</h2><p>sudo cp &#x2F;etc&#x2F;apt&#x2F;sources.list &#x2F;etc&#x2F;apt&#x2F;sources.list.bak—输入指令备份原有的下载源</p>
+<p>sudo gedit &#x2F;etc&#x2F;apt&#x2F;sources.list—修改source.list配置文件</p>
+<p>[国内镜像源（阿里、网易、清华、中科大)](<a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_68165821/article/details/129147126">国内镜像源（阿里、网易、清华、中科大） ubuntu20.04下载地址超快_ubuntu镜像下载地址 知乎-CSDN博客</a>)</p>
+<h2 id="uart"><a href="#uart" class="headerlink" title="uart"></a>uart</h2><p>cat  &#x2F;proc&#x2F;tty&#x2F;driver&#x2F;xuartps</p>
+<p>cat &#x2F;proc&#x2F;cmdline</p>
+<p>while true;do echo 1234 &gt; &#x2F;dev&#x2F;ttyS4;sleep 1;done（回环测试，循环操作）</p>
+<p>cat &#x2F;sys&#x2F;kernel&#x2F;debug&#x2F;clk&#x2F;clk_summary | grep uart(查询到UART工作时钟频率)</p>
+<h2 id="WIFI配置"><a href="#WIFI配置" class="headerlink" title="WIFI配置"></a>WIFI配置</h2><ol>
+<li><p>这段代码是一个WPA_supplicant的配置文件示例。WPA_supplicant是一个用于连接Wi-Fi网络的软件，它读取和解析这样的配置文件来进行连接设置。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ctrl_interface=/var/run/wpa_supplicant</span><br><span class="line">ap_scan=<span class="number">1</span></span><br><span class="line">update_config=<span class="number">1</span></span><br><span class="line"></span><br><span class="line">network=&#123;</span><br><span class="line">        ssid=<span class="string">&quot;ebaina666&quot;</span></span><br><span class="line">        psk=<span class="string">&quot;86112366&quot;</span></span><br><span class="line">        key_mgmt=WPA-PSK</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建一个socket通信目录 mkdir -p &#x2F;var&#x2F;run&#x2F;wpa_supplicant</p>
+</li>
+<li><p>wpa_supplicant -dd -Dwext -iwlan0 -c &#x2F;etc&#x2F;wpa_supplicant.conf</p>
+<ul>
+<li>wpa_supplicant: 这是要运行的wpa_supplicant程序</li>
+<li>-dd: 这是一个调试选项，使wpa_supplicant以调试模式运行，输出详细的调试信息</li>
+<li>-Dwext: 这是指定wpa_supplicant要使用的驱动程序。在这种情况下，使用的是名为wext的驱动程序，它是一个兼容Linux Wireless Extensions的驱动</li>
+<li>-iwlan0: 这是指定要连接的无线网络接口的名称。在这个例子中，使用的是名为wlan0的接口</li>
+<li>-c &#x2F;etc&#x2F;wpa_supplicant.conf: 这是指定wpa_supplicant配置文件的路径。在这个例子中，配置文件的路径是&#x2F;etc&#x2F;wpa_supplicant.conf</li>
+<li>通过运行这个命令，wpa_supplicant将以调试模式运行，使用wext驱动程序，连接到wlan0接口，并基于&#x2F;etc&#x2F;wpa_supplicant.conf配置文件进行无线网络的连接。配置文件中包含与Wi-Fi网络的连接设置相关的参数，例如SSID、密码等</li>
+</ul>
+</li>
+</ol>
+<h2 id="v4l2-ctl基本使用指令"><a href="#v4l2-ctl基本使用指令" class="headerlink" title="v4l2-ctl基本使用指令"></a>v4l2-ctl基本使用指令</h2><ol>
+<li><p>v4l2-ctl –list-devices—列出所有设备</p>
+</li>
+<li><p>v4l2-ctl –list-formats-ext -d &#x2F;dev&#x2F;video0—列出指定设备的预览支持格式</p>
+</li>
+<li><p>v4l2-ctl –all -d dev&#x2F;video0—获取指定设备的所有信息</p>
+</li>
+<li><p>v4l2-ctl –list-ctrls -d &#x2F;dev&#x2F;v4l-sudbev4—列出设备控制值</p>
+</li>
+<li><p>grep -H ‘’ &#x2F;sys&#x2F;class&#x2F;video4linux&#x2F;video*&#x2F;name—查找所有<code>/sys/class/video4linux</code>目录下的<code>video*</code>子目录中的<code>name</code>文件</p>
+</li>
+<li><p>media-ctl -p -d &#x2F;dev&#x2F;media0</p>
+</li>
+</ol>
+<h2 id="根文件启动流程"><a href="#根文件启动流程" class="headerlink" title="根文件启动流程"></a>根文件启动流程</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Run /sbin/init as init process</span><br><span class="line">Run /etc/init as init process</span><br><span class="line">Run /bin/init as init process</span><br><span class="line">Run /bin/sh as init process</span><br></pre></td></tr></table></figure>
 
-<p>附启动路径：&#x2F;sbin &#x2F;init -&gt;&#x2F;etc&#x2F;inittab  -&gt;&#x2F;etc&#x2F;init.d&#x2F;rcS </p>
-<p>&#x2F;etc&#x2F;fstab是用来存放文件系统的静态信息的文件. 当系统启动的时候，系统会自动地从这个文件读取信息，并且会自动将此文件中指定的文件系统挂载到指定的目录</p>
-<p>添加busybox可执行文件</p>
-<p>制作ubuntu文件系统：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/zero of=./ubuntu_ss928_rootfs.ext4 bs=1M count=1024</span><br><span class="line">mkfs.ext4 -d ubuntu-base-20.04.3-base-arm64 ubuntu_ss928_rootfs.ext4</span><br></pre></td></tr></table></figure>
+<h2 id="Makefile知识点"><a href="#Makefile知识点" class="headerlink" title="Makefile知识点"></a>Makefile知识点</h2><p><code>pushd $(OSDRV_DIR)/pub/$(PUB_ROOTFS);chmod 550 bin/mount bin/netstat sbin/route;popd;</code></p>
+<p>切换到指定目录，修改特定文件的权限，然后返回到原始目录</p>
+<h2 id="Busybox知识点"><a href="#Busybox知识点" class="headerlink" title="Busybox知识点"></a>Busybox知识点</h2><blockquote>
+<p>可以设置 <code>DESTDIR</code> 变量，将 BusyBox 安装到指定的目录</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make install DESTDIR=/path/to/your/directory</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p>可以使用 <code>make</code> 命令并通过 <code>CONFIG</code> 变量指定配置文件</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt;make CONFIG=/path/to/your/config/file</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="uboot"><a href="#uboot" class="headerlink" title="uboot"></a>uboot</h2><p>1.显示脚本执行指令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">setenv xtrace yes</span><br></pre></td></tr></table></figure>
 
-<h2 id="配置环境变量-指定启动初始化路径"><a href="#配置环境变量-指定启动初始化路径" class="headerlink" title="配置环境变量,指定启动初始化路径"></a>配置环境变量,指定启动初始化路径</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">setenv bootargs <span class="string">&#x27;mem=512M console=ttyAMA0,115200 clk_ignore_unused root=/dev/mmcblk0p3 rootfstype=ext4 rw rootwait blkdevparts=mmcblk0:1M(boot),12M(kernel),-(rootfs)&#x27;</span>;</span><br><span class="line">setenv bootcmd <span class="string">&#x27;mmc read 0 0x42000000 0x800 0x6000;bootm 0x42000000&#x27;</span>;</span><br><span class="line">setenv bootargs <span class="string">&quot;<span class="variable">$&#123;bootargs&#125;</span> init=/bin/sh&quot;</span></span><br><span class="line">sa</span><br><span class="line"></span><br><span class="line">boot</span><br></pre></td></tr></table></figure>
+<h2 id="git"><a href="#git" class="headerlink" title="git"></a>git</h2><ol>
+<li><p><strong>配置 Git 用户信息：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name &quot;Your Name&quot;</span><br><span class="line">git config --global user.email &quot;your.email@example.com&quot;</span><br></pre></td></tr></table></figure>
 
-<h2 id="进入系统"><a href="#进入系统" class="headerlink" title="进入系统"></a>进入系统</h2><p>执行busybox sh</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./busybox sh</span><br></pre></td></tr></table></figure>
+<p>设置全局用户信息，用于提交记录。</p>
+</li>
+<li><p><strong>创建新仓库：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br></pre></td></tr></table></figure>
 
-<p>挂载上  &#x2F;etc&#x2F;fstab   </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount -a </span><br></pre></td></tr></table></figure>
+<p>在当前目录下创建一个新的 Git 仓库。</p>
+</li>
+<li><p><strong>克隆远程仓库：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone remote_repository_url</span><br></pre></td></tr></table></figure>
 
-<p>&#x2F;proc  &#x2F;sys把系统设备的创设备文件  查一下 </p>
-<p>如果&#x2F;dev&#x2F;没有内容,增加上述内容</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/fstab  </span><br></pre></td></tr></table></figure>
+<p>从远程仓库克隆项目到本地。</p>
+</li>
+<li><p><strong>检查文件状态：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git status</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mdev - s</span><br></pre></td></tr></table></figure>
+<p>显示工作目录中文件的状态。</p>
+</li>
+<li><p><strong>添加文件到暂存区：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git add filename</span><br></pre></td></tr></table></figure>
 
-<p>板子ip 配网络   </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./busybox ifconfig 192.168.137.2 <span class="comment">#这里使用的是共享网络</span></span><br></pre></td></tr></table></figure>
+<p>将文件添加到 Git 暂存区。</p>
+</li>
+<li><p><strong>提交更改：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit -m &quot;Commit message&quot;</span><br></pre></td></tr></table></figure>
 
-<p>配置路由</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route add default gw 192.168.137.1 <span class="comment">#共享网络网关</span></span><br></pre></td></tr></table></figure>
+<p>将暂存区的更改提交到本地仓库。</p>
+</li>
+<li><p><strong>查看提交历史：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git log</span><br></pre></td></tr></table></figure>
 
-<p>配置 dns 服务器</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/resolv.cong</span><br></pre></td></tr></table></figure>
+<p>显示提交历史记录。</p>
+</li>
+<li><p><strong>创建分支：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch branch_name</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nameserver 8.8.8.8</span><br></pre></td></tr></table></figure>
+<p>创建一个新的分支。</p>
+</li>
+<li><p><strong>切换分支：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout branch_name</span><br></pre></td></tr></table></figure>
 
-<p>同步时间</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">date -s 2023/11/1 11:10</span><br></pre></td></tr></table></figure>
+<p>切换到指定分支。</p>
+</li>
+<li><p><strong>合并分支：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git merge branch_name</span><br></pre></td></tr></table></figure>
 
-<p>执行</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt update</span><br></pre></td></tr></table></figure>
+<p>将指定分支合并到当前分支。</p>
+</li>
+<li><p><strong>查看远程仓库：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote -v</span><br></pre></td></tr></table></figure>
 
-<p>需要安装的软件</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemd  vim  net-tools  udev  haveged</span><br></pre></td></tr></table></figure>
+<p>显示与项目关联的远程仓库信息。</p>
+</li>
+<li><p><strong>推送到远程仓库：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin branch_name</span><br></pre></td></tr></table></figure>
 
-<p>设置ubuntu密码</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">passwd</span><br></pre></td></tr></table></figure>
+<p>将本地分支的更改推送到远程仓库。</p>
+</li>
+<li><p><strong>拉取远程更改：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull origin branch_name</span><br></pre></td></tr></table></figure>
 
-<p>重启</p>
-<p>注：内核需要开启CGROUP，重新编译、烧录。</p>
+<p>从远程仓库拉取更改并合并到本地分支。</p>
+</li>
+<li><p><strong>解决合并冲突：</strong> 在合并中遇到冲突时，手动编辑文件解决冲突，然后执行：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git add filename</span><br><span class="line">git commit -m &quot;Merge conflict resolution&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>撤销本地更改：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout -- filename</span><br></pre></td></tr></table></figure>
+
+<p>丢弃工作目录中文件的本地更改。</p>
+</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git push origin --delete main---删除远程分支</span><br><span class="line">git push -f origin master---强制推送将更改应用到远程仓库</span><br><span class="line">git merge --allow-unrelated-histories origin/master---保留远程仓库和本地仓库的历史记录，可以合并它们</span><br></pre></td></tr></table></figure>
+
+<h2 id="ssh"><a href="#ssh" class="headerlink" title="ssh"></a>ssh</h2><ol>
+<li><p><strong>连接到远程主机：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh username@hostname</span><br></pre></td></tr></table></figure>
+
+<p>将 <code>username</code> 替换为您在远程主机上的用户名，<code>hostname</code> 替换为远程主机的地址或主机名。</p>
+</li>
+<li><p><strong>指定端口号连接到远程主机：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -p port_number username@hostname</span><br></pre></td></tr></table></figure>
+
+<p>将 <code>port_number</code> 替换为远程主机上 SSH 服务的端口号。</p>
+</li>
+<li><p><strong>复制文件到远程主机：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp local_file username@hostname:remote_path</span><br></pre></td></tr></table></figure>
+
+<p>将 <code>local_file</code> 替换为本地文件的路径，<code>username@hostname</code> 替换为目标主机和用户名，<code>remote_path</code> 替换为远程主机上的目标路径。</p>
+</li>
+<li><p><strong>从远程主机复制文件到本地：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp username@hostname:remote_file local_path</span><br></pre></td></tr></table></figure>
+
+<p>将 <code>username@hostname</code> 替换为远程主机和用户名，<code>remote_file</code> 替换为远程主机上的文件路径，<code>local_path</code> 替换为本地目标路径。</p>
+</li>
+<li><p><strong>生成 SSH 密钥对：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -b 2048</span><br></pre></td></tr></table></figure>
+
+<p>生成 SSH 密钥对，可选择不同的密钥类型（<code>-t</code> 参数）和位数（<code>-b</code> 参数）。</p>
+</li>
+<li><p><strong>复制本地 SSH 公钥到远程主机：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-copy-id username@hostname</span><br></pre></td></tr></table></figure>
+
+<p>将本地的 SSH 公钥复制到远程主机，使得在无密码的情况下连接到远程主机更方便。</p>
+</li>
+<li><p><strong>断开 SSH 连接：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exit</span><br></pre></td></tr></table></figure>
+
+<p>或者直接使用 <code>Ctrl + D</code> 快捷键来退出当前 SSH 会话。</p>
+</li>
+</ol>
+<h2 id="python"><a href="#python" class="headerlink" title="python"></a>python</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建python3组，指定/usr/bin/python3链接到/usr/bin/python3.6的优先级为0(优先数越大优先级越高)</span></span><br><span class="line">update-alternatives --install /usr/<span class="built_in">bin</span>/python3 python3 /usr/<span class="built_in">bin</span>/python3<span class="number">.6</span> <span class="number">0</span></span><br><span class="line"><span class="comment"># 指定链接到python3.8的优先级为1</span></span><br><span class="line">update-alternatives --install /usr/<span class="built_in">bin</span>/python3 python3 /usr/<span class="built_in">bin</span>/python3<span class="number">.8</span> <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置python3使用哪个配置</span></span><br><span class="line">update-alternatives --config python3</span><br></pre></td></tr></table></figure>
+
+<h2 id="TFTP"><a href="#TFTP" class="headerlink" title="TFTP"></a>TFTP</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">上传本地a.txt到tftp服务器并修改名称为b.txt</span></span><br><span class="line">tftp -p -l a.txt -r b.txt 192.168.5.222</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">从tftp服务器获取a.txt到本地并修改名称为b.txt</span></span><br><span class="line">tftp -g -r a.txt -l b.txt 192.168.5.222</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">从tftp服务器获取a.txt</span></span><br><span class="line">tftp 192.168.5.222 -g -r a.txt</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">上传本地a.txt到tftp服务器</span></span><br><span class="line">tftp 192.168.5.222 -p -l a.txt</span><br><span class="line"></span><br><span class="line">说明:</span><br><span class="line">-p [put:上传]</span><br><span class="line">-l [local:本地]</span><br><span class="line">-g [get:获取]</span><br><span class="line">-r [remote:远端]</span><br><span class="line">192.168.5.222 [tftp服务器IP]</span><br></pre></td></tr></table></figure>
+
+<h2 id="ubuntu-usb连接不上虚拟机"><a href="#ubuntu-usb连接不上虚拟机" class="headerlink" title="ubuntu usb连接不上虚拟机"></a>ubuntu usb连接不上虚拟机</h2><p><img src="/posts/524123629/image-20240322164924664.png" alt="image-20240322164924664"></p>
+<h2 id="telnet-root无法登录"><a href="#telnet-root无法登录" class="headerlink" title="telnet root无法登录"></a>telnet root无法登录</h2><p><img src="/posts/524123629/image-20240326173539209.png" alt="image-20240326173539209"></p>
 
                 
                 <p class="end">__END__</p>
@@ -141,7 +404,7 @@
     <div class="suffix-box-right">
         <span class="suffix-box-title">文章作者：</span>Liu For Code
         <br>
-        <span class="suffix-box-title">文章出处：</span><a href="/posts/2867551922.html" target="_blank">移植ubuntu</a>
+        <span class="suffix-box-title">文章出处：</span><a href="/posts/524123629.html" target="_blank">个人笔记</a>
         <br>
         <span class="suffix-box-title">作者签名：</span>简单地活着, 肆意又精彩.
         <br>
@@ -156,7 +419,7 @@
                     <div class="category">
                         分类：
                         
-                            <a href="/category/%E7%A7%BB%E6%A4%8D/">移植</a>
+                            <a href="/category/%E5%B8%B8%E8%AF%86/">常识</a>
                         
                     </div>
                 
@@ -164,17 +427,14 @@
                     <div class="tag">
                         标签：
                         
-                            <a href="/tag/%E7%A7%BB%E6%A4%8Dubuntu/">移植ubuntu</a>
+                            <a href="/tag/%E4%B8%AA%E4%BA%BA%E7%AC%94%E8%AE%B0/">个人笔记</a>
                         
                     </div>
                 
                 <div class="article-prev-next">
                     
-                        <a href="/posts/2254430952.html" class="prev-prefix">« </a> 上一篇：    <a href="/posts/2254430952.html" title="发布于 2024-03-31 03:24">Linux应用编程手册</a>
-                        <br>
                     
-                    
-                        <a href="/posts/636681753.html" class="next-prefix">» </a> 下一篇：    <a href="/posts/636681753.html" title="发布于 2024-03-01 12:21">rv1126屏幕测试demo</a>
+                        <a href="/posts/2254430952.html" class="next-prefix">» </a> 下一篇：    <a href="/posts/2254430952.html" title="发布于 2024-03-31 03:24">Linux应用编程手册</a>
                     
                 </div>
             </div>

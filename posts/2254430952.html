@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, shrink-to-fit=no">
+    <meta name="referrer" content="origin">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <title>
+        
+            Linux应用编程手册
+        
+    </title>
+    <link rel="shortcut icon" href="#"/>
+
+    <link type="text/css" rel="stylesheet" href="/font/LongCang.css">
+    <link type="text/css" rel="stylesheet" href="/font/Monda.css">
+    <link type="text/css" rel="stylesheet" href="/font/NotoSansSC.css">
+    <link type="text/css" rel="stylesheet" href="/font/NotoSerifSC.css">
+    <link type="text/css" rel="stylesheet" href="/font/Playball.css">
+    <link type="text/css" rel="stylesheet" href="/font/PTMono.css">
+    <link type="text/css" rel="stylesheet" href="/font/Roboto.css">
+    <link type="text/css" rel="stylesheet" href="/font/RobotoSlab.css">
+    <link type="text/css" rel="stylesheet" href="/font/Rosario.css">
+    <link type="text/css" rel="stylesheet" href="/font/UbuntuMono.css">
+
+    <link type="text/css" rel="stylesheet" href="/css/base.css">
+    <link type="text/css" rel="stylesheet" href="/css/code.css">
+
+    <script type="text/javascript" src="/js/jquery-3.4.1.min.js"></script>
+<meta name="generator" content="Hexo 7.1.1"></head>
+<body>
+    <a id="cover"></a>
+    <link type="text/css" rel="stylesheet" href="/css/post.css">
+<div id="header" class="header">
+    <div class="vertical">
+        <div class="inner">
+            
+                <h1 class="header-subtitle">Linux应用编程手册</h1>
+                <div class="header-subinfo">
+                    <p class="article-info-text">
+                        <span>
+                            <i class="iconfont icon-time"></i> 发表时间：2024-03-31
+                        </span>
+                        
+                            
+                                <span id="/posts/2254430952.html" class="leancloud_visitors" data-flag-title="Linux应用编程手册">
+                                    <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
+                                </span>
+                            
+                            
+                                <span>
+                                    <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/posts/2254430952.html"></span>
+                                </span>
+                              
+                        
+                    </p>
+                    
+                        
+                            <span class="category-color">应用编程</span>
+                        
+                    
+                    
+                        
+                            <span class="tag-color">Linux应用编程手册</span>
+                        
+                    
+                </div>
+            
+        </div>
+    </div>
+    
+</div>
+<div id="container">
+    
+        <!-- 文章页面 -->
+        <div id="article">
+            <div class="toc"></div>
+            <div class="article-body">
+                <h2 id="标准I-O"><a href="#标准I-O" class="headerlink" title="标准I&#x2F;O"></a>标准I&#x2F;O</h2><ul>
+<li><strong>概念</strong></li>
+</ul>
+<p>标准IO是ANSI C建立的一个标准I&#x2F;O模型，是一个标准函数包和stdio.h头文件包含的定义，本质就是一套对文件操作的函数，一般称之为库函数。只有开发环境有标准IO库，标准IO就可以使用，不严格依赖系统内核，所以可移植性强。标准IO也要对文件操作，也是对硬件操作，所以本质还是系统调用（事实上标准IO函数其实是由文件IO所封装出来的），只是标准IO在执行系统调用时多 ——— 缓冲区机制。</p>
+<ul>
+<li><strong>相关函数</strong></li>
+</ul>
+<ol>
+<li><strong>fopen()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 打开一个文件，并返回一个指向文件的指针</span></span><br><span class="line"><span class="comment"> * @param pathname 字符串，表示要打开的文件名称</span></span><br><span class="line"><span class="comment"> * @param mode 字符串，表示文件的打开模式(如下表)</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 该函数返回一个 FILE 指针。否则返回 NULL，且设置全局变量 errno 来标识错误</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">FILE *<span class="title function_">fopen</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *pathname, <span class="type">const</span> <span class="type">char</span> *mode)</span>;</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="left">模式</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">“r”</td>
+<td align="left">打开一个用于读取的文件。该文件必须存在</td>
+</tr>
+<tr>
+<td align="left">“w”</td>
+<td align="left">创建一个用于写入的空文件。如果文件名称与已存在的文件相同，则会删除已有文件的内容，文件被视为一个新的空文件</td>
+</tr>
+<tr>
+<td align="left">“a”</td>
+<td align="left">追加到一个文件。写操作向文件末尾追加数据。如果文件不存在，则创建文件</td>
+</tr>
+<tr>
+<td align="left">“r+”</td>
+<td align="left">打开一个用于更新的文件，可读取也可写入。该文件必须存在</td>
+</tr>
+<tr>
+<td align="left">“w+”</td>
+<td align="left">创建一个用于读写的空文件</td>
+</tr>
+<tr>
+<td align="left">“a+”</td>
+<td align="left">打开一个用于读取和追加的文件</td>
+</tr>
+</tbody></table>
+<ol start="2">
+<li><strong>fclose()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 关闭流 stream。刷新所有的缓冲区</span></span><br><span class="line"><span class="comment"> * @param stream 这是指向 FILE 对象的指针，该 FILE 对象指定了要被关闭的流</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @return 如果流成功关闭，则该方法返回零。如果失败，则返回 EOF</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">fclose</span><span class="params">(FILE *stream)</span>;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><strong>fprintf()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 发送格式化输出到流 stream 中</span></span><br><span class="line"><span class="comment"> * @param stream 这是指向 FILE 对象的指针，该 FILE 对象标识了流</span></span><br><span class="line"><span class="comment"> * @param format 这是 C 字符串，包含了要被写入到流 stream 中的文本</span></span><br><span class="line"><span class="comment"> * @param ... 可变参数，根据不同的 format 字符串</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @return 如果成功，则返回写入的字符总数，否则返回一个负数</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">fprintf</span><span class="params">(FILE *stream, <span class="type">const</span> <span class="type">char</span> *format, ...)</span>;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li><strong>fputs()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 把字符串写入到指定的流 stream 中，但不包括空字符</span></span><br><span class="line"><span class="comment"> * @param str 这是一个数组，包含了要写入的以空字符终止的字符序列</span></span><br><span class="line"><span class="comment"> * @param stream 这是指向 FILE 对象的指针，该 FILE 对象标识了要被写入字符串的流</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @return 该函数返回一个非负值，如果发生错误则返回 EOF</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">fputs</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *str, FILE *stream)</span>;</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li><strong>fgets()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 从指定的流 stream 读取一行，并把它存储在 str 所指向的字符串内</span></span><br><span class="line"><span class="comment"> * @param str 这是指向一个字符数组的指针，该数组存储了要读取的字符串</span></span><br><span class="line"><span class="comment"> * @param n 这是要读取的最大字符数（包括最后的空字符）。通常是使用以 str 传递的数组长度</span></span><br><span class="line"><span class="comment"> * @param stream 这是指向 FILE 对象的指针，该 FILE 对象标识了要从中读取字符的流</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @return 如果成功，该函数返回相同的 str 参数。如果到达文件末尾或者没有读取到任何字符，str 的内容保持不变，并返回一个空指针</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">char</span> *<span class="title function_">fgets</span><span class="params">(<span class="type">char</span> *str, <span class="type">int</span> n, FILE *stream)</span>;</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li><strong>fwrite()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 把 ptr 所指向的数组中的数据写入到给定流 stream 中</span></span><br><span class="line"><span class="comment"> * @param ptr 这是指向要被写入的元素数组的指针</span></span><br><span class="line"><span class="comment"> * @param size 这是要被写入的每个元素的大小，以字节为单位</span></span><br><span class="line"><span class="comment"> * @param nmemb 这是元素的个数，每个元素的大小为 size 字节</span></span><br><span class="line"><span class="comment"> * @param stream 这是指向 FILE 对象的指针，该 FILE 对象指定了一个输出流\</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @return 如果成功，该函数返回一个 size_t 对象，表示元素的总数，该对象是一个整型数据类型。如果该数字与 nmemb 参数不同，则会显示一个错误</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">size_t</span> <span class="title function_">fwrite</span><span class="params">(<span class="type">const</span> <span class="type">void</span> *ptr, <span class="type">size_t</span> size, <span class="type">size_t</span> nmemb, FILE *stream)</span>;</span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li><strong>fread()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 从给定流 stream 读取数据到 ptr 所指向的数组中</span></span><br><span class="line"><span class="comment"> * @param ptr 这是指向带有最小尺寸 size*nmemb 字节的内存块的指针</span></span><br><span class="line"><span class="comment"> * @param size 这是要读取的每个元素的大小，以字节为单位</span></span><br><span class="line"><span class="comment"> * @param nmemb 这是元素的个数，每个元素的大小为 size 字节</span></span><br><span class="line"><span class="comment"> * @param stream 这是指向 FILE 对象的指针，该 FILE 对象指定了一个输入流</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @return 成功读取的元素总数会以 size_t 对象返回，size_t 对象是一个整型数据类型。如果总数与 nmemb 参数不同，则可能发生了一个错误或者到达了文件末尾</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">size_t</span> <span class="title function_">fread</span><span class="params">(<span class="type">void</span> *ptr, <span class="type">size_t</span> size, <span class="type">size_t</span> nmemb, FILE *stream)</span>;</span><br></pre></td></tr></table></figure>
+
+<ol start="8">
+<li><strong>fseek()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 设置流 stream 的文件位置为给定的偏移 offset，参数 offset 意味着从给定的 whence 位置查找的字节数</span></span><br><span class="line"><span class="comment"> * @param stream 这是指向 FILE 对象的指针，该 FILE 对象标识了流</span></span><br><span class="line"><span class="comment"> * @param offset 这是相对 whence 的偏移量，以字节为单位</span></span><br><span class="line"><span class="comment"> * @param whence 这是表示开始添加偏移 offset 的位置。它一般指定为下表常量之一</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @return 如果成功，则该函数返回零，否则返回非零值</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">fseek</span><span class="params">(FILE *stream, <span class="type">long</span> <span class="type">int</span> offset, <span class="type">int</span> whence)</span>;</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="left">常量</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">SEEK_SET</td>
+<td align="left">文件的开头</td>
+</tr>
+<tr>
+<td align="left">SEEK_CUR</td>
+<td align="left">文件指针的当前位置</td>
+</tr>
+<tr>
+<td align="left">SEEK_END</td>
+<td align="left">文件的末尾</td>
+</tr>
+</tbody></table>
+<ol start="9">
+<li><strong>ftell()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 返回给定流 stream 的当前文件位置</span></span><br><span class="line"><span class="comment"> * @param stream 这是指向 FILE 对象的指针，该 FILE 对象标识了流</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 该函数返回位置标识符的当前值。如果发生错误，则返回 -1，全局变量 errno 被设置为一个正值</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">long</span> <span class="type">int</span> <span class="title function_">ftell</span><span class="params">(FILE *stream)</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="例程"><a href="#例程" class="headerlink" title="例程"></a>例程</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> N 32</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="type">int</span> id;</span><br><span class="line">    <span class="type">char</span> name[N];</span><br><span class="line">&#125;MSG;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    FILE* fp = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="type">char</span> buf[N] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="type">long</span> offset = <span class="number">0</span>;</span><br><span class="line">    MSG msg = &#123;<span class="number">1001</span>,<span class="string">&quot;ebaina&quot;</span>&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>((fp = fopen(<span class="string">&quot;file.txt&quot;</span>,<span class="string">&quot;w+&quot;</span>)) == <span class="literal">NULL</span>)&#123; <span class="comment">//在当前目录下创建一个可读可写file.txt文件，文件存在则清空，不存在则创建，返回文件流指针fp</span></span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>,<span class="string">&quot;fopen failed&quot;</span>); <span class="comment">//把错误输出到标准错误流中(无缓冲)</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">fputs</span>(<span class="string">&quot;hello world!&quot;</span>,fp) == EOF)&#123; <span class="comment">//往file.txt文件中写入hello world!</span></span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>,<span class="string">&quot;fputs failed&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-2</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>((offset = ftell(fp)) &lt; <span class="number">0</span>)&#123; <span class="comment">//获取文件读写指针当前位置</span></span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>,<span class="string">&quot;ftell failed&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-3</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;offset = %ld\n&quot;</span>,offset);</span><br><span class="line">    <span class="keyword">if</span>(fseek(fp,-offset,SEEK_END) &lt; <span class="number">0</span>)&#123; <span class="comment">//设置文件读写指针位置回到文件开始位置</span></span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>,<span class="string">&quot;fseek failed&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-4</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(fgets(buf,<span class="keyword">sizeof</span>(buf),fp) == <span class="literal">NULL</span>)&#123; <span class="comment">//读取file.txt文件到buf中</span></span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>,<span class="string">&quot;fgets failed or reach file.txt of end&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-5</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;buf = %s\n&quot;</span>,buf); <span class="comment">//打印buf数据终端显示</span></span><br><span class="line"></span><br><span class="line">    offset = ftell(fp); <span class="comment">//获取文件读写指针当前位置</span></span><br><span class="line">    fseek(fp,-offset,SEEK_END); <span class="comment">//设置文件读写指针位置回到文件开始位置</span></span><br><span class="line"></span><br><span class="line">    fwrite(&amp;msg,<span class="keyword">sizeof</span>(MSG),<span class="number">1</span>,fp); <span class="comment">//把msg结构体写入file.txt文件</span></span><br><span class="line">    offset = ftell(fp); <span class="comment">//获取文件读写指针当前位置</span></span><br><span class="line">    fseek(fp,-offset,SEEK_END); <span class="comment">//设置文件读写指针位置回到文件开始位置</span></span><br><span class="line">    <span class="built_in">memset</span>(&amp;msg,<span class="number">0</span>,<span class="keyword">sizeof</span>(MSG)); <span class="comment">//清空msg结构体</span></span><br><span class="line">    fread(&amp;msg,<span class="keyword">sizeof</span>(MSG),<span class="number">1</span>,fp); <span class="comment">//读取file.txt文件中的内容到msg结构体中</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;msg.id = %d,msg.name = %s\n&quot;</span>,msg.id,msg.name); <span class="comment">//打印msg结构体数据</span></span><br><span class="line"></span><br><span class="line">    fclose(fp); <span class="comment">//关闭文件流指针fp    </span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="文件I-O"><a href="#文件I-O" class="headerlink" title="文件I&#x2F;O"></a>文件I&#x2F;O</h2><ul>
+<li><strong>概念</strong></li>
+</ul>
+<p>文件操作的本质是对硬件操作，在linux内核里面编写大量的系统调用的函数，都是对硬件的操作，linux操作系统也给应用层提供了一些函数，这些函数可以调用linux内核里面对硬件操作的函数，从而间接对硬件进行操作，我们将应用层的这些操作文件的函数称之为文件IO，本质上系统调用。文件IO是由操作系统提供的基本IO服务，与OS绑定，特定于linux或者unix平台。</p>
+<ul>
+<li><strong>相关函数</strong></li>
+</ul>
+<ol>
+<li><strong>open()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 打开一个文件，并返回一个指向文件描述符</span></span><br><span class="line"><span class="comment"> * @param pathname 字符串，表示要打开的文件名称</span></span><br><span class="line"><span class="comment"> * @param flags 用于指定打开文件的方式和操作模式的标志(如下表)</span></span><br><span class="line"><span class="comment"> * @param mode 只在创建文件时使用，指定文件的权限</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 返回一个文件描述符，它是一个非负整数，用于后续的文件操作。如果出现错误，返回 -1，并设置全局变量 errno 来指示错误的类型</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">open</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *pathname, <span class="type">int</span> flags)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">open</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *pathname, <span class="type">int</span> flags, <span class="type">mode_t</span> mode)</span>;</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="left">模式</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">O_RDONLY</td>
+<td>只读</td>
+</tr>
+<tr>
+<td align="left">O_WRONLY</td>
+<td>只写</td>
+</tr>
+<tr>
+<td align="left">O_RDWR</td>
+<td>可读可写</td>
+</tr>
+<tr>
+<td align="left">O_APPEND</td>
+<td>文件存则追加</td>
+</tr>
+<tr>
+<td align="left">O_CREAT</td>
+<td>文件不存在则创建（必须要提供mode参数）</td>
+</tr>
+<tr>
+<td align="left">O_TRUNC</td>
+<td>文件存在则清空</td>
+</tr>
+</tbody></table>
+<ol start="2">
+<li><strong>close()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 关闭文件描述符</span></span><br><span class="line"><span class="comment"> * @param fd 文件描述符，是要关闭的文件的标识符</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 该函数返回一个整数值。如果成功关闭文件，返回值为0；如果出现错误，返回值为-1，并设置全局变量 errno 来指示错误的类型</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">close</span><span class="params">(<span class="type">int</span> fd)</span>;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><strong>write()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 用于将数据从缓冲区写入文件</span></span><br><span class="line"><span class="comment"> * @param fd 文件描述符，表示要写入的文件或文件流</span></span><br><span class="line"><span class="comment"> * @param buf 一个指向要写入的数据的缓冲区的指针</span></span><br><span class="line"><span class="comment"> * @param count 要写入的字节数</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 它返回实际写入的字节数。如果写入成功，则返回写入的字节数；如果出现错误，则返回-1，并设置全局变量 errno 来指示错误的类型</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">ssize_t</span> <span class="title function_">write</span><span class="params">(<span class="type">int</span> fd, <span class="type">const</span> <span class="type">void</span> *buf, <span class="type">size_t</span> count)</span>;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li><strong>read()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 用于从文件中读取数据到缓冲区</span></span><br><span class="line"><span class="comment"> * @param fd 文件描述符，表示要读取的文件或文件流</span></span><br><span class="line"><span class="comment"> * @param buf 一个指向存储读取数据的缓冲区的指针</span></span><br><span class="line"><span class="comment"> * @param count 要读取的字节数</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 它返回实际读取的字节数。读取成功，则返回读取的字节数；如果已经到达文件末尾，返回0；如果出现错误，则返回-1，并设置全局变量 errno 来指示错误类型</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">ssize_t</span> <span class="title function_">read</span><span class="params">(<span class="type">int</span> fd, <span class="type">void</span> *buf, <span class="type">size_t</span> count)</span>;</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li><strong>lseek()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 用于在文件中进行定位，可以移动文件中的读/写位置</span></span><br><span class="line"><span class="comment"> * @param fd 文件描述符，表示要进行定位的文件或文件流</span></span><br><span class="line"><span class="comment"> * @param offset 这是相对 whence 的偏移量，以字节为单位</span></span><br><span class="line"><span class="comment"> * @param whence 这是表示开始添加偏移 offset 的位置，它一般指定为下表常量之一</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 它返回新的文件偏移量，如果出现错误，则返回-1，并设置全局变量 errno 来指示错误的类型</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">off_t</span> <span class="title function_">lseek</span><span class="params">(<span class="type">int</span> fd, <span class="type">off_t</span> offset, <span class="type">int</span> whence)</span>;</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="left">常量</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">SEEK_SET</td>
+<td align="left">文件的开头</td>
+</tr>
+<tr>
+<td align="left">SEEK_CUR</td>
+<td align="left">文件指针的当前位置</td>
+</tr>
+<tr>
+<td align="left">SEEK_END</td>
+<td align="left">文件的末尾</td>
+</tr>
+</tbody></table>
+<h3 id="例程-1"><a href="#例程-1" class="headerlink" title="例程"></a>例程</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> N 32</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> fd = <span class="number">-1</span>;</span><br><span class="line">    <span class="type">off_t</span> offset = <span class="number">-1</span>;</span><br><span class="line">    <span class="type">char</span> buf[<span class="number">32</span>]=&#123;<span class="number">0</span>&#125;;</span><br><span class="line">    fd = open(<span class="string">&quot;file.txt&quot;</span>, O_RDWR | O_CREAT | O_TRUNC , <span class="number">0664</span>); <span class="comment">//在当前目录下创建一个可读可写file.txt文件，文件存在则清空，不存在则创建，返回文件描述符fd</span></span><br><span class="line">    <span class="keyword">if</span> (fd &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;open failed&quot;</span>);  <span class="comment">//把错误输出到标准错误流中(无缓冲)</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    write(fd,<span class="string">&quot;hello world!&quot;</span>,<span class="keyword">sizeof</span>(<span class="string">&quot;hello world!&quot;</span>)); <span class="comment">//往file.txt文件中写入hello world!</span></span><br><span class="line">    lseek(fd, <span class="number">0</span>, SEEK_SET); <span class="comment">//把读写指针偏移会文件开始位置</span></span><br><span class="line">    read(fd, buf, <span class="keyword">sizeof</span>(buf)); <span class="comment">//读取file.txt文件内容到buf中</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;buf = %s\n&quot;</span>,buf); <span class="comment">//打印buf数据终端显示</span></span><br><span class="line"></span><br><span class="line">    close(fd); <span class="comment">//关闭文件描述符</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="信号"><a href="#信号" class="headerlink" title="信号"></a>信号</h2><ul>
+<li><strong>概念</strong></li>
+</ul>
+<p>信号是原本操作系统已经定义好的一些标识，当一个进程执行过程中产生信号之后，就会对当前进程或者其他进程做出改变。信号是在软件层次上对中断机制的一种模拟，是一种异步通信机制。（<strong>信号是所有进程间通信方式中唯一的一种异步通信机制</strong>）</p>
+<ul>
+<li><strong>相关函数</strong></li>
+</ul>
+<ol>
+<li><strong>signal()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;signal.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 设置一个函数来处理信号</span></span><br><span class="line"><span class="comment"> * @param signum 产生的信号(指令kill -l可以查看Linux下的信号)</span></span><br><span class="line"><span class="comment"> * @param handler 信号处理函数</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 该函数返回信号处理程序之前的值，当发生错误时返回 SIG_ERR</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">sighandler_t</span> <span class="title function_">signal</span><span class="params">(<span class="type">int</span> signum, <span class="type">sighandler_t</span> handler)</span>;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><strong>sigaction()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;signal.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 用于设置和检索信号处理程序的系统调用</span></span><br><span class="line"><span class="comment"> * @param signum 指定要操作的信号编号</span></span><br><span class="line"><span class="comment"> * @param act 指定新的信号处理方式，是一个指向 struct sigaction 结构的指针，该结构包含了新的信号处理函数及相关的标志等信息</span></span><br><span class="line"><span class="comment"> * @param oldact 用于保存之前的信号处理方式的结构的指针</span></span><br><span class="line"><span class="comment"> * @return 成功0，失败-1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">sigaction</span><span class="params">(<span class="type">int</span> signum, <span class="type">const</span> <span class="keyword">struct</span> sigaction *act, <span class="keyword">struct</span> sigaction *oldact)</span>;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><strong>kill()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;signal.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 用于向指定的进程发送信号</span></span><br><span class="line"><span class="comment"> * @param pid 进程标识符，表示要发送信号的目标进程</span></span><br><span class="line"><span class="comment"> * @param sig 要发送的信号的编号</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 返回0表示成功，-1表示出现错误，错误类型通过全局变量 errno 返回</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">kill</span><span class="params">(<span class="type">pid_t</span> pid, <span class="type">int</span> sig)</span>;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li><strong>pause()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 阻塞等待任意信号的产生</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 函数返回-1，并设置全局变量 errno 为 EINTR（表示被信号中断）</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">pause</span><span class="params">(<span class="type">void</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="例程-2"><a href="#例程-2" class="headerlink" title="例程"></a>例程</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;signal.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">handler</span><span class="params">(<span class="type">int</span> arg)</span>&#123; <span class="comment">//信号处理函数</span></span><br><span class="line">    <span class="keyword">if</span> (arg == SIGTSTP)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;SIGTSTP被捕捉到了\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (arg == SIGQUIT)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;SIGQUIT被捕捉到了\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (arg == SIGINT)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;SIGINT被捕捉到了\n&quot;</span>);</span><br><span class="line">        kill(getpid(),SIGKILL); <span class="comment">//给前进程发送杀死信号</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> ret = <span class="number">-1</span>;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sigaction</span> <span class="title">act</span>, <span class="title">oldact</span>;</span></span><br><span class="line">    <span class="keyword">if</span>(signal(SIGTSTP,handler) == SIG_ERR)&#123; <span class="comment">//捕捉SIGTSTP信号（快捷键ctl+z），使用handler处理</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;signal failed\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(signal(SIGINT,handler) == SIG_ERR)&#123; <span class="comment">//捕捉SIGINT信号（快捷键ctl+c），使用handler处理</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;signal failed\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-2</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">memset</span>(&amp;act, <span class="number">0</span>, <span class="keyword">sizeof</span>(act));</span><br><span class="line">    <span class="built_in">memset</span>(&amp;oldact, <span class="number">0</span>, <span class="keyword">sizeof</span>(oldact));</span><br><span class="line">    act.sa_handler = handler;</span><br><span class="line">    act.sa_flags = <span class="number">0</span>;</span><br><span class="line">    ret = sigaction(SIGQUIT, &amp;act, &amp;oldact); <span class="comment">//捕捉SIGQUIT信号（快捷键ctl+\），使用handler处理</span></span><br><span class="line">    <span class="keyword">if</span>(ret &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;sigaction failed\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-3</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123; <span class="comment">//死循环让进程一直运行，使用快捷键ctl+z,ctl+\终端会有打印信息，使用快捷键ctl+c会杀死当前进程</span></span><br><span class="line">        pause(); <span class="comment">//阻塞等待任意信号的产生</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;hello world!\n&quot;</span>);</span><br><span class="line">        sleep(<span class="number">1</span>);</span><br><span class="line">    &#125; </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h2><ul>
+<li><strong>概念</strong></li>
+</ul>
+<p>进程是在计算机中正在运行的程序的实例，每一个进程都有属于自己的内存空间，它们工作在计算机的处理器，并通过交换机制与其他进程和系统资源进行通信和协作，进程是操作系统中最基本的概念之一，每一个进程都有自己的优先级和状态，进程可以被创建，暂停，终止。</p>
+<ul>
+<li><strong>相关函数</strong></li>
+</ul>
+<ol>
+<li><strong>fork()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 创建子进程</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 1.在父进程中，fork 返回子进程的进程ID（PID&gt;0）2.在子进程中，fork 返回0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">pid_t</span> <span class="title function_">fork</span><span class="params">(<span class="type">void</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><strong>getpid()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 获取当前进程PID</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 当前进程PID</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">pid_t</span> <span class="title function_">getpid</span><span class="params">(<span class="type">void</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><strong>getppid()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 获取当前进程的父进程PID</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 当前进程的父进程PID</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">pid_t</span> <span class="title function_">getppid</span><span class="params">(<span class="type">void</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="例程-3"><a href="#例程-3" class="headerlink" title="例程"></a>例程</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">pid_t</span> pid = <span class="number">-1</span>;</span><br><span class="line">    <span class="type">int</span> num = <span class="number">0</span>;</span><br><span class="line">    pid = fork(); <span class="comment">//创建子进程（pid &gt; 0父进程；pid = 0子进程）</span></span><br><span class="line">    <span class="keyword">if</span> (pid &gt; <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;父进程getpid = %d,getppid = %d\n&quot;</span>,getpid(),getppid()); <span class="comment">//打印父进程的pid和父进程的父进程pid</span></span><br><span class="line">        <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;父进程正在运行,num = %d\n&quot;</span>,num); <span class="comment">//打印num数值变化，可以发现是两个不同的进程在运行</span></span><br><span class="line">            num++;</span><br><span class="line">            sleep(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(pid == <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;子进程getpid = %d,getppid = %d\n&quot;</span>,getpid(),getppid()); <span class="comment">//打印子进程的pid和子进程的父进程pid（子进程的getppid应该等于父进程的getpid）</span></span><br><span class="line">        <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;子进程正在运行,num = %d\n&quot;</span>,num); <span class="comment">//打印num数值变化，可以发现是两个不同的进程在运行</span></span><br><span class="line">            num += <span class="number">2</span>;</span><br><span class="line">            sleep(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;fotk failed\n&quot;</span>); <span class="comment">//pid &lt; 0 创建子进程失败</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="进程通信"><a href="#进程通信" class="headerlink" title="进程通信"></a>进程通信</h2><ul>
+<li><strong>概念</strong></li>
+</ul>
+<p>进程是一个独立的资源分配单元，通常情况下，进程之间是没有关系的，一个进程不能直接访问另一个进程的资源，同时一个进程的崩溃不会影响到其他进程。但是，进程之间并不完全是孤立的，一个足够大的项目绝对不是由一个单独的进程可以支撑起来的，所以我们需要使用多进程，也需要进程之间能够相互通信，来满足进程之间信息交互和传递的需求。</p>
+<ul>
+<li><strong>相关函数</strong></li>
+</ul>
+<ol>
+<li><strong>pipe()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 用于创建一个无名管道，该管道可以在父进程和子进程之间进行进程间通信</span></span><br><span class="line"><span class="comment"> * @param pipefd 用于存储新创建的管道的文件描述符，pipefd[0] 是用于读取的文件描述符，pipefd[1] 是用于写入的文件描述符</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 返回0表示成功，-1表示出现错误，错误类型通过全局变量 errno 返回</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">pipe</span><span class="params">(<span class="type">int</span> pipefd[<span class="number">2</span>])</span>;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><strong>mkfifo()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 用于创建一个命名管道，也称为有名管道</span></span><br><span class="line"><span class="comment"> * @param pathname 一个字符串，表示要创建的 FIFO（命名管道）的路径和名称</span></span><br><span class="line"><span class="comment"> * @param mode 一个用于设置 FIFO 权限（权限掩码）的整数，它通常使用八进制数表示，例如0644</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 返回0表示成功，-1表示出现错误，错误类型通过全局变量 errno 返回</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">mkfifo</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *pathname, <span class="type">mode_t</span> mode)</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="例程-4"><a href="#例程-4" class="headerlink" title="例程"></a>例程</h3><ol>
+<li><strong>无名管道</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/ipc.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/msg.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> N 32</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">pid_t</span> pid = <span class="number">-1</span>;</span><br><span class="line">    <span class="type">int</span> pipefd[<span class="number">2</span>]=&#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="type">char</span> buf[N]=&#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="keyword">if</span>(pipe(pipefd) &lt; <span class="number">0</span>)&#123; <span class="comment">//创建无名管道</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;pipe failed\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    pid = fork(); <span class="comment">//创建子进程</span></span><br><span class="line">    <span class="keyword">if</span>(pid &gt; <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">            write(pipefd[<span class="number">1</span>],<span class="string">&quot;hello world!&quot;</span>,<span class="keyword">sizeof</span>(<span class="string">&quot;hello world!&quot;</span>)); <span class="comment">//往无名管道写入数据</span></span><br><span class="line">            sleep(<span class="number">2</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(pid == <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">            read(pipefd[<span class="number">0</span>],buf,<span class="keyword">sizeof</span>(buf)); <span class="comment">//读取无名管道数据放入buf中</span></span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;buf = %s\n&quot;</span>,buf); <span class="comment">//打印buf数据终端显示</span></span><br><span class="line">            sleep(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><strong>有名管道</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line">有名管道---写</span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;errno.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> ret = <span class="number">-1</span>;</span><br><span class="line">    <span class="type">int</span> fd = <span class="number">-1</span>;</span><br><span class="line">    ret = mkfifo(<span class="string">&quot;fifo&quot;</span>,<span class="number">0664</span>); <span class="comment">//创建有名管道</span></span><br><span class="line">    <span class="keyword">if</span> (ret == <span class="number">-1</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span> (errno != <span class="number">17</span>)&#123; <span class="comment">//错误码17代表fifo管道已经存在</span></span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;mkfifo failed\n&quot;</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;fifo is existing\n&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fd = open(<span class="string">&quot;fifo&quot;</span>, O_RDWR); <span class="comment">//打开有名管道</span></span><br><span class="line">    <span class="keyword">if</span> (fd &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;open failed\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">        write(fd,<span class="string">&quot;hello world!&quot;</span>,<span class="keyword">sizeof</span>(<span class="string">&quot;hello world!&quot;</span>)); <span class="comment">//往管道里面写入数据hello world!</span></span><br><span class="line">        sleep(<span class="number">2</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">有名管道---读</span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;errno.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> N 32</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> ret = <span class="number">-1</span>;</span><br><span class="line">    <span class="type">int</span> fd = <span class="number">-1</span>;</span><br><span class="line">    <span class="type">char</span> buf[N] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    ret = mkfifo(<span class="string">&quot;fifo&quot;</span>,<span class="number">0664</span>); <span class="comment">//创建有名管道</span></span><br><span class="line">    <span class="keyword">if</span> (ret == <span class="number">-1</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span> (errno != <span class="number">17</span>)&#123; <span class="comment">//错误码17代表fifo管道已经存在</span></span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;mkfifo failed\n&quot;</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;fifo is existing\n&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fd = open(<span class="string">&quot;fifo&quot;</span>, O_RDWR); <span class="comment">//打开有名管道</span></span><br><span class="line">    <span class="keyword">if</span> (fd &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;open failed\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">        read(fd,buf,<span class="keyword">sizeof</span>(buf)); <span class="comment">//读取管道里面数据存入buf</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;buf = %s\n&quot;</span>,buf); <span class="comment">//打印buf数据终端显示</span></span><br><span class="line">        sleep(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h2><ul>
+<li><strong>概念</strong></li>
+</ul>
+<p>每一个进程都至少有一个线程，而这个线程就是我们通常所说的主控线程，进程也可以创建出多个线程，这些线程都是依附于进程的，线程会与所属进程的其他线程共享一个进程的所有资源。由于线程对比进程比较轻量，所以相对而言，调度线程耗费的资源要远小于调度进程，所以<strong>线程是CPU调度的基本单位</strong>。</p>
+<ul>
+<li><strong>相关函数</strong></li>
+</ul>
+<ol>
+<li><strong>pthread_create()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 在当前进程重开启一个新的线程</span></span><br><span class="line"><span class="comment"> * @param thread 线程ID，本质上进程地址空间的一个地址，是操作系统分配个线程</span></span><br><span class="line"><span class="comment"> * @param attr 线程的属性，如果是默认，设置为NULL</span></span><br><span class="line"><span class="comment"> * @param start_routine 线程处理函数</span></span><br><span class="line"><span class="comment"> * @param arg 给线程处理函数传参</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 返回0表示成功，非0失败</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">pthread_create</span><span class="params">(<span class="type">pthread_t</span> *thread, <span class="type">const</span> <span class="type">pthread_attr_t</span> *attr, <span class="type">void</span> *(*start_routine) (<span class="type">void</span> *), <span class="type">void</span> *arg)</span>;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><strong>pthread_self()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 获取当前线程的ID，与pthread_create函数thread参数一致</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 返回线程ID</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">pthread_t</span> <span class="title function_">pthread_self</span><span class="params">(<span class="type">void</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><strong>pthread_exit()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 退出当前线程</span></span><br><span class="line"><span class="comment"> * @param retval 退出线程后返回的值，这个值可以被同一进程下的其他线程通过pthread_join获取</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 无返回值</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">pthread_exit</span><span class="params">(<span class="type">void</span> *retval)</span>;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li><strong>pthread_jion()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 阻塞等待可结合态线程退出信息并且回收线程资源</span></span><br><span class="line"><span class="comment"> * @param thread 指定的线程ID</span></span><br><span class="line"><span class="comment"> * @param retval 保存指定线程退出的状态，pthread_exit所设置的值</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 成功0，失败非0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">pthread_join</span><span class="params">(<span class="type">pthread_t</span> thread, <span class="type">void</span> **retval)</span>;</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li><strong>pthread_detach()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description:  将一个线程状态设置为分离态（处于分离态的线程结束时资源会自动释放）</span></span><br><span class="line"><span class="comment"> * @param thread 指定的线程ID</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 成功0，失败非0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">pthread_detach</span><span class="params">(<span class="type">pthread_t</span> thread)</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="例程-5"><a href="#例程-5" class="headerlink" title="例程"></a>例程</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span>* <span class="title function_">pthread_callback</span><span class="params">(<span class="type">void</span>* arg)</span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;线程正在运行\n&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;线程ID = %ld\n&quot;</span>,pthread_self()); <span class="comment">//打印当前线程ID</span></span><br><span class="line">    <span class="type">int</span> num = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span> (num &gt; <span class="number">4</span>)&#123;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;线程正在运行\n&quot;</span>);</span><br><span class="line">        num++;</span><br><span class="line">        sleep(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    pthread_exit(<span class="string">&quot;线程退出&quot;</span>); <span class="comment">//线程退出</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">pthread_t</span> pthread = <span class="number">-1</span>;</span><br><span class="line">    <span class="type">int</span> ret = <span class="number">0</span>;</span><br><span class="line">    ret = pthread_create(&amp;pthread, <span class="literal">NULL</span>, pthread_callback, <span class="literal">NULL</span>); <span class="comment">//创建新的线程</span></span><br><span class="line">    <span class="keyword">if</span> (ret != <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;pthread_create failed\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;pthread = %ld\n&quot;</span>,pthread); <span class="comment">//打印线程ID</span></span><br><span class="line"></span><br><span class="line">    <span class="type">void</span>* retval = <span class="literal">NULL</span>;</span><br><span class="line">    pthread_join(pthread, &amp;retval); <span class="comment">//阻塞等待指定线程的退出</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;pthread_jion is %s\n&quot;</span>,(<span class="type">char</span> *)retval); <span class="comment">//打印线程退出信息</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="线程同步"><a href="#线程同步" class="headerlink" title="线程同步"></a>线程同步</h2><ul>
+<li><strong>概念</strong></li>
+</ul>
+<p>因为线程调度机制是依附进程的，也是时间片轮转，所以如果有多个线程同一时刻对一个共享资源进行操作，当一个线程还未操作完毕时，第二个线程就要操作，此时就会出现问题 —— 竞态，指的是一种特殊的情况，在这种情况下，各个线程以一种没有逻辑的顺序执行，从而会造成意想不到的结果。</p>
+<ul>
+<li><strong>相关函数</strong></li>
+</ul>
+<ol>
+<li><strong>互斥锁</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 初始化互斥锁</span></span><br><span class="line"><span class="comment"> * @param mutex 互斥锁</span></span><br><span class="line"><span class="comment"> * @param mutexattr 互斥锁的属性，默认设置NULL</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 成功0，失败-1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">pthread_mutex_init</span><span class="params">(<span class="type">pthread_mutex_t</span> *__mutex, <span class="type">const</span> <span class="type">pthread_mutexattr_t</span> *__mutexattr)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 进行上锁操作</span></span><br><span class="line"><span class="comment"> * @param mutex 指定的互斥锁（pthread_mutex_init的mutex）</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 成功0，失败-1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">pthread_mutex_lock</span><span class="params">(<span class="type">pthread_mutex_t</span> *__mutex)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 进行解锁操作</span></span><br><span class="line"><span class="comment"> * @param mutex 指定的互斥锁（pthread_mutex_init的mutex）</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 成功0，失败-1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">pthread_mutex_unlock</span> <span class="params">(<span class="type">pthread_mutex_t</span> *__mutex)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 销毁互斥锁</span></span><br><span class="line"><span class="comment"> * @param mutex 指定的互斥锁（pthread_mutex_init的mutex）</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 成功0，失败-1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">pthread_mutex_destroy</span><span class="params">(<span class="type">pthread_mutex_t</span> *__mutex)</span>;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><strong>自旋锁</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 初始化自旋锁</span></span><br><span class="line"><span class="comment"> * @param lock 自旋锁</span></span><br><span class="line"><span class="comment"> * @param pshared 表示是否可以在进程之间共享:1.PTHREAD_PROCESS_SHARED可以在进程之间共享，2.PTHREAD_PROCESS_PRIVATE仅在同一进程的线程之间共享</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 成功0，失败-1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">pthread_spin_init</span><span class="params">(<span class="type">pthread_spinlock_t</span> *lock, <span class="type">int</span> pshared)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 进行上锁操作</span></span><br><span class="line"><span class="comment"> * @param lock 指定的自旋锁（pthread_spin_init的lock）</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 成功0，失败-1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">pthread_spin_lock</span><span class="params">(<span class="type">pthread_spinlock_t</span> *lock)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 进行解锁操作</span></span><br><span class="line"><span class="comment"> * @param lock 指定的自旋锁（pthread_spin_init的lock）</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 成功0，失败-1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">pthread_spin_unlock</span><span class="params">(<span class="type">pthread_spinlock_t</span> *lock)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 销毁自旋锁</span></span><br><span class="line"><span class="comment"> * @param lock 指定的自旋锁（pthread_spin_init的lock）</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 成功0，失败-1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">pthread_spin_destroy</span><span class="params">(<span class="type">pthread_spinlock_t</span> *lock)</span>;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><strong>读写锁</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 初始化读写锁</span></span><br><span class="line"><span class="comment"> * @param rwlock 读写锁</span></span><br><span class="line"><span class="comment"> * @param attr 读写锁属性，通常为 NULL 表示使用默认属性</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 成功0，失败-1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">pthread_rwlock_init</span><span class="params">(<span class="type">pthread_rwlock_t</span> *rwlock, <span class="type">const</span> <span class="type">pthread_rwlockattr_t</span> *attr)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 读上锁</span></span><br><span class="line"><span class="comment"> * @param rwlock 指定的读写锁（pthread_rwlock_init的rwlock）</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 成功0，失败-1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">pthread_rwlock_rdlock</span><span class="params">(<span class="type">pthread_rwlock_t</span> *rwlock)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 写上锁</span></span><br><span class="line"><span class="comment"> * @param rwlock 指定的读写锁（pthread_rwlock_init的rwlock）</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 成功0，失败-1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">pthread_rwlock_wrlock</span><span class="params">(<span class="type">pthread_rwlock_t</span> *rwlock)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 进行解锁操作</span></span><br><span class="line"><span class="comment"> * @param rwlock 指定的读写锁（pthread_rwlock_init的rwlock）</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 成功0，失败-1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">pthread_rwlock_unlock</span><span class="params">(<span class="type">pthread_rwlock_t</span> *rwlock)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 销毁读写锁</span></span><br><span class="line"><span class="comment"> * @param rwlock 指定的读写锁（pthread_rwlock_init的rwlock）</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 成功0，失败-1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">pthread_rwlock_destroy</span><span class="params">(<span class="type">pthread_rwlock_t</span> *rwlock)</span>;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li><strong>条件变量</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 初始化条件变量</span></span><br><span class="line"><span class="comment"> * @param cond 条件变量</span></span><br><span class="line"><span class="comment"> * @param cond_attr 条件变量的属性，一般设置为NULL代表使用默认属性</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 成功0，失败-1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">pthread_cond_init</span><span class="params">(<span class="type">pthread_cond_t</span> *__restrict__ __cond, <span class="type">const</span> <span class="type">pthread_condattr_t</span> *__restrict__ __cond_attr)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 给一个线程发送信号通知（唤醒等待队列中的某一个线程）</span></span><br><span class="line"><span class="comment"> * @param cond 指定的（pthread_cond_init的cond）</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 成功0，失败-1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">pthread_cond_signal</span><span class="params">(<span class="type">pthread_cond_t</span> *__cond)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 给所有的线程发送信号通知（唤醒等待队列中所有的线程）</span></span><br><span class="line"><span class="comment"> * @param cond 指定的读写锁（pthread_cond_init的cond）</span></span><br><span class="line"><span class="comment"> * @return 成功0，失败-1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">pthread_cond_broadcast</span><span class="params">(<span class="type">pthread_cond_t</span> *__cond)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 阻塞等待发送方发送信号（等待接收信号）</span></span><br><span class="line"><span class="comment"> * @param cond 指定的读写锁（pthread_cond_init的cond）</span></span><br><span class="line"><span class="comment"> * @param mutex 互斥锁</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 成功0，失败-1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">pthread_cond_wait</span><span class="params">(<span class="type">pthread_cond_t</span> *__restrict__ __cond, <span class="type">pthread_mutex_t</span> *__restrict__ __mutex)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 销毁条件变量</span></span><br><span class="line"><span class="comment"> * @param cond 指定的读写锁（pthread_cond_init的cond）</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 成功0，失败-1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">pthread_cond_destroy</span><span class="params">(<span class="type">pthread_cond_t</span> *__cond)</span>;</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li><strong>信号量</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;semaphore.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 初始化信号量</span></span><br><span class="line"><span class="comment"> * @param sem 信号量</span></span><br><span class="line"><span class="comment"> * @param pshared 确认在进程间使用还是线程间使用</span></span><br><span class="line"><span class="comment"> * @param value 信号量初始值</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 成功0，失败-1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">sem_init</span> <span class="params">(<span class="type">sem_t</span> *__sem, <span class="type">int</span> __pshared, <span class="type">unsigned</span> <span class="type">int</span> __value)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 执行P操作，将信号量减1，当信号量&lt;=0时阻塞</span></span><br><span class="line"><span class="comment"> * @param sem 指定的信号量（sem_init的sem）</span></span><br><span class="line"><span class="comment"> * @return 成功0，失败-1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">sem_wait</span> <span class="params">(<span class="type">sem_t</span> *__sem)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 执行V操作，将信号量加1</span></span><br><span class="line"><span class="comment"> * @param sem 指定的信号量（sem_init的sem）</span></span><br><span class="line"><span class="comment"> * @return 成功0，失败-1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">sem_post</span> <span class="params">(<span class="type">sem_t</span> *__sem)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 销毁信号量</span></span><br><span class="line"><span class="comment"> * @param sem 指定的信号量（sem_init的sem）</span></span><br><span class="line"><span class="comment"> * @return 成功0，失败-1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">sem_destroy</span> <span class="params">(<span class="type">sem_t</span> *__sem)</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="例程-6"><a href="#例程-6" class="headerlink" title="例程"></a>例程</h3><ol>
+<li><strong>互斥锁和条件变量</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//生产者和消费者模型 —— 线程同步互斥模型</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">pthread_mutex_t</span> mutex;</span><br><span class="line"><span class="type">pthread_cond_t</span> cond;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> food = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> *<span class="title function_">pthread_produce</span><span class="params">(<span class="type">void</span> *arg)</span>&#123;</span><br><span class="line">    sleep(<span class="number">3</span>);</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">        sleep(<span class="number">1</span>);</span><br><span class="line">        pthread_mutex_lock(&amp;mutex);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;正在生产食物...\n&quot;</span>);</span><br><span class="line">        food++;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;生产食物完毕...目前的食物总数:%d\n&quot;</span>, food);</span><br><span class="line">        pthread_mutex_unlock(&amp;mutex);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//让生产者执行完毕后给消费者发送信号通知</span></span><br><span class="line">        pthread_cond_signal(&amp;cond);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> *<span class="title function_">pthread_customer</span><span class="params">(<span class="type">void</span> *arg)</span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">        sleep(<span class="number">1</span>);</span><br><span class="line">        pthread_mutex_lock(&amp;mutex);</span><br><span class="line">        pthread_cond_wait(&amp;cond, &amp;mutex);</span><br><span class="line">        <span class="comment">//只有执行到wait的时候接收信号才会有作用，如果信号早到了会错失信号</span></span><br><span class="line">        </span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;正在消耗食物...\n&quot;</span>);</span><br><span class="line">        food--;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;消费食物完毕...目前的食物总数:%d\n&quot;</span>, food);</span><br><span class="line">        pthread_mutex_unlock(&amp;mutex);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//初始化条件变量</span></span><br><span class="line">    pthread_cond_init(&amp;cond, <span class="literal">NULL</span>);</span><br><span class="line">    pthread_mutex_init(&amp;mutex, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="type">pthread_t</span> thread1, thread2;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;进程正在运行....\n&quot;</span>);</span><br><span class="line">    <span class="comment">//使用pthread_create来创建线程</span></span><br><span class="line">    <span class="keyword">if</span>(pthread_create(&amp;thread1, <span class="literal">NULL</span>, pthread_produce, <span class="literal">NULL</span>) != <span class="number">0</span>)&#123;</span><br><span class="line">        perror(<span class="string">&quot;pthread_create error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(pthread_create(&amp;thread2, <span class="literal">NULL</span>, pthread_customer, <span class="literal">NULL</span>) != <span class="number">0</span>)&#123;</span><br><span class="line">        perror(<span class="string">&quot;pthread_create error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    pthread_join(thread1, <span class="literal">NULL</span>);</span><br><span class="line">    pthread_join(thread2, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><strong>自旋锁</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义一个自旋锁变量</span></span><br><span class="line"><span class="type">pthread_spinlock_t</span> spinlock;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 共享数据</span></span><br><span class="line"><span class="type">int</span> shared_data = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 线程函数</span></span><br><span class="line"><span class="type">void</span>* <span class="title function_">thread_func</span><span class="params">(<span class="type">void</span>* arg)</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100000</span>; i++) &#123;</span><br><span class="line">        pthread_spin_lock(&amp;spinlock); <span class="comment">// 获取自旋锁</span></span><br><span class="line">        shared_data++; <span class="comment">// 修改共享数据</span></span><br><span class="line">        pthread_spin_unlock(&amp;spinlock); <span class="comment">// 释放自旋锁</span></span><br><span class="line">    &#125;</span><br><span class="line">    pthread_exit(<span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">pthread_t</span> threads[<span class="number">4</span>];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 初始化自旋锁</span></span><br><span class="line">    pthread_spin_init(&amp;spinlock, PTHREAD_PROCESS_PRIVATE);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 创建4个线程</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++) &#123;</span><br><span class="line">        pthread_create(&amp;threads[i], <span class="literal">NULL</span>, thread_func, <span class="literal">NULL</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 等待线程结束</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++) &#123;</span><br><span class="line">        pthread_join(threads[i], <span class="literal">NULL</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 销毁自旋锁</span></span><br><span class="line">    pthread_spin_destroy(&amp;spinlock);</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;shared_data = %d\n&quot;</span>, shared_data);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><strong>读写锁</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义一个读写锁变量</span></span><br><span class="line"><span class="type">pthread_rwlock_t</span> rwlock;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 共享数据</span></span><br><span class="line"><span class="type">int</span> shared_data = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 读线程函数</span></span><br><span class="line"><span class="type">void</span>* <span class="title function_">reader</span><span class="params">(<span class="type">void</span>* arg)</span> &#123;</span><br><span class="line">    pthread_rwlock_rdlock(&amp;rwlock); <span class="comment">// 获取读锁</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Reader thread %ld: shared_data = %d\n&quot;</span>, pthread_self(), shared_data);</span><br><span class="line">    pthread_rwlock_unlock(&amp;rwlock); <span class="comment">// 释放读锁</span></span><br><span class="line">    pthread_exit(<span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 写线程函数</span></span><br><span class="line"><span class="type">void</span>* <span class="title function_">writer</span><span class="params">(<span class="type">void</span>* arg)</span> &#123;</span><br><span class="line">    pthread_rwlock_wrlock(&amp;rwlock); <span class="comment">// 获取写锁</span></span><br><span class="line">    shared_data++; <span class="comment">// 修改共享数据</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Writer thread %ld: shared_data = %d\n&quot;</span>, pthread_self(), shared_data);</span><br><span class="line">    pthread_rwlock_unlock(&amp;rwlock); <span class="comment">// 释放写锁</span></span><br><span class="line">    pthread_exit(<span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">pthread_t</span> threads[<span class="number">4</span>];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 初始化读写锁</span></span><br><span class="line">    pthread_rwlock_init(&amp;rwlock, <span class="literal">NULL</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 创建2个读线程和2个写线程</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">2</span>; i++) &#123;</span><br><span class="line">        pthread_create(&amp;threads[i], <span class="literal">NULL</span>, reader, <span class="literal">NULL</span>);</span><br><span class="line">        pthread_create(&amp;threads[i+<span class="number">2</span>], <span class="literal">NULL</span>, writer, <span class="literal">NULL</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 等待线程结束</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++) &#123;</span><br><span class="line">        pthread_join(threads[i], <span class="literal">NULL</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 销毁读写锁</span></span><br><span class="line">    pthread_rwlock_destroy(&amp;rwlock);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li><strong>信号量</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;semaphore.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">sem_t</span> sem;</span><br><span class="line"><span class="type">sem_t</span> sem2;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> food = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span>* <span class="title function_">pthread_func</span><span class="params">(<span class="type">void</span> *arg)</span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line"></span><br><span class="line">        sleep(<span class="number">1</span>);</span><br><span class="line">        sem_wait(&amp;sem); <span class="comment">//P操作</span></span><br><span class="line"></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;正在生产食物...\n&quot;</span>);</span><br><span class="line">        food++;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;生产食物完毕...目前的食物总数:%d\n&quot;</span>, food);</span><br><span class="line"></span><br><span class="line">        sem_post(&amp;sem2); <span class="comment">//V操作</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span>* <span class="title function_">pthread_func2</span><span class="params">(<span class="type">void</span> *arg)</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line"></span><br><span class="line">        sleep(<span class="number">1</span>);</span><br><span class="line">        sem_wait(&amp;sem2); <span class="comment">//P操作</span></span><br><span class="line"></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;正在消耗食物...\n&quot;</span>);</span><br><span class="line">        food--;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;消费食物完毕...目前的食物总数:%d\n&quot;</span>, food);</span><br><span class="line"></span><br><span class="line">        sem_post(&amp;sem); <span class="comment">//V操作</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">pthread_t</span> thread = <span class="number">-1</span>;</span><br><span class="line">    <span class="type">pthread_t</span> thread2 = <span class="number">-1</span>;</span><br><span class="line">    <span class="type">int</span> ret = <span class="number">-1</span>;</span><br><span class="line">    sem_init(&amp;sem, <span class="number">0</span>, <span class="number">1</span>); <span class="comment">//初始化信号</span></span><br><span class="line">    sem_init(&amp;sem2, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    ret = pthread_create(&amp;thread, <span class="literal">NULL</span>, pthread_func, <span class="literal">NULL</span>); <span class="comment">//创建线程</span></span><br><span class="line">    <span class="keyword">if</span> (ret != <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;pthread_create failed\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ret = pthread_create(&amp;thread2, <span class="literal">NULL</span>, pthread_func2, <span class="literal">NULL</span>); <span class="comment">//创建线程</span></span><br><span class="line">    <span class="keyword">if</span> (ret != <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;pthread_create failed\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//回收线程</span></span><br><span class="line">    pthread_join(thread,<span class="literal">NULL</span>); </span><br><span class="line">    pthread_join(thread2,<span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="网络编程"><a href="#网络编程" class="headerlink" title="网络编程"></a>网络编程</h2><ul>
+<li><strong>概念</strong></li>
+</ul>
+<p>在进程通信里面，我们学习了很多进程间通信的方式，但是只能用于在同一台主机下的多个进程之间通信，而Socket通信可以实现不同主机下的不同进程间的通信。</p>
+<ul>
+<li><strong>相关函数</strong></li>
+</ul>
+<ol>
+<li><strong>socket()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span>          </span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 创建套接字，返回最小的文件描述符</span></span><br><span class="line"><span class="comment"> * @param domain 通信域，协议族:1.AF_LOCAL 本地通信 2.AF_INET IPv4网络协议 3.AF_INET6 IPv6网络协议</span></span><br><span class="line"><span class="comment"> * @param type 套接字类型:1.SOCK_STREAM 流式套接字，用于TCP网络编程 2.SOCK_DGRAM  数据报式套接字，用于UDP网络编程</span></span><br><span class="line"><span class="comment"> * @param protocol 附加协议，设置为0，表示不需要添加额外的协议</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 成功文件描述符，失败-1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">socket</span><span class="params">(<span class="type">int</span> domain, <span class="type">int</span> type, <span class="type">int</span> protocol)</span>;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><strong>bind()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span>          </span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 将套接字和ipv4的网络信息结构体绑定</span></span><br><span class="line"><span class="comment"> * @param sockfd 文件描述符（socket的返回值）</span></span><br><span class="line"><span class="comment"> * @param addr ipv4的网络信息结构体</span></span><br><span class="line"><span class="comment"> * @param addrlen addr结构体的长度</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 成功0，失败-1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">bind</span><span class="params">(<span class="type">int</span> sockfd, <span class="type">const</span> <span class="keyword">struct</span> sockaddr *addr, <span class="type">socklen_t</span> addrlen)</span>;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><strong>listen()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span>          </span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 将套接字变为被动监听状态，用于接收将要到来的连接请求</span></span><br><span class="line"><span class="comment"> * @param sockfd 文件描述符（socket的返回值）</span></span><br><span class="line"><span class="comment"> * @param backlog 为套接字分配一个队列（连接请求队列）大小</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 成功0，失败-1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">listen</span><span class="params">(<span class="type">int</span> sockfd, <span class="type">int</span> backlog)</span>;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li><strong>accept()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span>          </span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 阻塞获取等待队列中第一个连接请求</span></span><br><span class="line"><span class="comment"> * @param sockfd 文件描述符（socket的返回值）</span></span><br><span class="line"><span class="comment"> * @param addr 网络信息结构体，客户端在连接之后会将自己的网络信息结构体保存在这个结构体当中</span></span><br><span class="line"><span class="comment"> * @param addrlen addr结构体的长度</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 成功返回新的文件描述符，失败-1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">accept</span><span class="params">(<span class="type">int</span> sockfd, <span class="keyword">struct</span> sockaddr *addr, <span class="type">socklen_t</span> *addrlen)</span>;</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li><strong>connect()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span>          </span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 给服务器发送连接的请求</span></span><br><span class="line"><span class="comment"> * @param sockfd 客户端的socket的返回值</span></span><br><span class="line"><span class="comment"> * @param addr 要连接的服务器的网络信息结构体，需要主动填充</span></span><br><span class="line"><span class="comment"> * @param addrlen addr结构体的长度</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 成功0，失败-1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">connect</span><span class="params">(<span class="type">int</span> sockfd, <span class="type">const</span> <span class="keyword">struct</span> sockaddr *addr, <span class="type">socklen_t</span> addrlen)</span>;</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li><strong>recv()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 从Socket中接收数据</span></span><br><span class="line"><span class="comment"> * @param sockfd 文件描述符</span></span><br><span class="line"><span class="comment"> * @param buf 保存接收的数据</span></span><br><span class="line"><span class="comment"> * @param len 想要接收到的字节数</span></span><br><span class="line"><span class="comment"> * @param flags 标志位:1.0表示阻塞 2.MSG_DONTWAIT 非阻塞</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return  成功实际接收到的字节数，失败-1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">ssize_t</span> <span class="title function_">recv</span><span class="params">(<span class="type">int</span> sockfd, <span class="type">void</span> *buf, <span class="type">size_t</span> len, <span class="type">int</span> flags)</span>;</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li><strong>send()</strong></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @description: 向对端socket发送数据</span></span><br><span class="line"><span class="comment"> * @param sockfd 文件描述符</span></span><br><span class="line"><span class="comment"> * @param buf 保存要发送的数据</span></span><br><span class="line"><span class="comment"> * @param len 要发送的数据的字节数</span></span><br><span class="line"><span class="comment"> * @param flags 标志位:1.0表示阻塞 2.MSG_DONTWAIT 非阻塞</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return 成功实际发送的字节数，失败-1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">ssize_t</span> <span class="title function_">send</span><span class="params">(<span class="type">int</span> sockfd, <span class="type">const</span> <span class="type">void</span> *buf, <span class="type">size_t</span> len, <span class="type">int</span> flags)</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="例程-7"><a href="#例程-7" class="headerlink" title="例程"></a>例程</h3><ol>
+<li>server</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span>          </span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> N 32</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span></span><br><span class="line">&#123;   </span><br><span class="line">    <span class="type">int</span> sockfd = <span class="number">-1</span>, acceptfd = <span class="number">-1</span>;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">servaddr</span>, <span class="title">clientaddr</span>;</span></span><br><span class="line">    <span class="type">socklen_t</span> addrlen = <span class="keyword">sizeof</span>(servaddr);</span><br><span class="line">    <span class="type">char</span> buf[N] =&#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line">    sockfd = socket(AF_INET, SOCK_STREAM, <span class="number">0</span>); <span class="comment">//创建网络套接字</span></span><br><span class="line">    <span class="keyword">if</span> (sockfd &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;socket failed\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">memset</span>(&amp;servaddr, <span class="number">0</span>, addrlen);</span><br><span class="line">    servaddr.sin_family = AF_INET;</span><br><span class="line">    servaddr.sin_addr.s_addr = inet_addr(<span class="string">&quot;127.0.0.1&quot;</span>); <span class="comment">//将点分十进制的ip地址转化成网络字节序的无符号的32位整形数据</span></span><br><span class="line">    servaddr.sin_port = htons(<span class="number">8888</span>); <span class="comment">//将主机字节序转化成网络字节序</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(bind(sockfd, (<span class="keyword">struct</span> sockaddr*)&amp;servaddr,addrlen) == <span class="number">-1</span>)&#123; <span class="comment">//将套接字和ipv4的网络信息结构体绑定</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;bind failed\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(listen(sockfd, <span class="number">5</span>) == <span class="number">-1</span>)&#123; <span class="comment">//将套接字变为被动监听状态，用于接收将要到来的连接请求</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;listen failed\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    acceptfd = accept(sockfd, (<span class="keyword">struct</span> sockaddr *)&amp;clientaddr, &amp;addrlen); <span class="comment">//阻塞获取等待队列中第一个连接请求</span></span><br><span class="line">    <span class="keyword">if</span> (acceptfd == <span class="number">-1</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;accept failed\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> ret = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span>((ret = recv(acceptfd, buf, <span class="keyword">sizeof</span>(buf), <span class="number">0</span>)) &lt; <span class="number">0</span>)&#123; <span class="comment">//从Socket中接收数据</span></span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;recv failed\n&quot;</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> (ret == <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;client is quit\n&quot;</span>);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;buf = %s\n&quot;</span>,buf);</span><br><span class="line">    &#125;</span><br><span class="line">    close(sockfd);</span><br><span class="line">    close(acceptfd);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>client</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span>          </span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span></span><br><span class="line">&#123;   </span><br><span class="line">    <span class="type">int</span> sockfd = <span class="number">-1</span>, acceptfd = <span class="number">-1</span>;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">servaddr</span>;</span></span><br><span class="line">    <span class="type">socklen_t</span> addrlen = <span class="keyword">sizeof</span>(servaddr);</span><br><span class="line"></span><br><span class="line">    sockfd = socket(AF_INET, SOCK_STREAM, <span class="number">0</span>); <span class="comment">//创建网络套接字</span></span><br><span class="line">    <span class="keyword">if</span> (sockfd &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;socket failed\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">memset</span>(&amp;servaddr, <span class="number">0</span>, addrlen);</span><br><span class="line">    servaddr.sin_family = AF_INET;</span><br><span class="line">    servaddr.sin_addr.s_addr = inet_addr(<span class="string">&quot;127.0.0.1&quot;</span>); <span class="comment">//将点分十进制的ip地址转化成网络字节序的无符号的32位整形数据</span></span><br><span class="line">    servaddr.sin_port = htons(<span class="number">8888</span>); <span class="comment">//将主机字节序转化成网络字节序</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(connect(sockfd, (<span class="keyword">struct</span> sockaddr*)&amp;servaddr, addrlen) &lt; <span class="number">0</span>)&#123; <span class="comment">//给服务器发送连接的请求</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;connect failed\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> num = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span> (num &gt; <span class="number">4</span>)&#123;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        send(sockfd, <span class="string">&quot;hello world!&quot;</span>, <span class="keyword">sizeof</span>(<span class="string">&quot;hello world!&quot;</span>), <span class="number">0</span>); <span class="comment">//发送hello world!到socket中</span></span><br><span class="line">        num++;</span><br><span class="line">        sleep(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    close(sockfd);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+                
+                <p class="end">__END__</p>
+            </div>
+            <div class="article-footer">
+                <div class="suffix-box">
+    <div class="suffix-box-left">
+        <img src="/image/sidebar/avatar.jpg" alt="Liu For Code">
+    </div>
+    <div class="suffix-box-right">
+        <span class="suffix-box-title">文章作者：</span>Liu For Code
+        <br>
+        <span class="suffix-box-title">文章出处：</span><a href="/posts/2254430952.html" target="_blank">Linux应用编程手册</a>
+        <br>
+        <span class="suffix-box-title">作者签名：</span>简单地活着, 肆意又精彩.
+        <br>
+        <span class="suffix-box-title">关于主题：</span><a href="https://github.com/first19326/Hexo-LiveForCode" target="_blank">Hexo - Live For Code</a>
+        <br>
+        <span class="suffix-box-title">版权声明：</span>文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" title="BY-NC-SA" target="_blank">BY-NC-SA</a> 许可协议，转载请注明出处
+        <br>
+    </div>
+    <div style="clear: both;"></div>
+</div>
+                
+                    <div class="category">
+                        分类：
+                        
+                            <a href="/category/%E5%BA%94%E7%94%A8%E7%BC%96%E7%A8%8B/">应用编程</a>
+                        
+                    </div>
+                
+                
+                    <div class="tag">
+                        标签：
+                        
+                            <a href="/tag/Linux%E5%BA%94%E7%94%A8%E7%BC%96%E7%A8%8B%E6%89%8B%E5%86%8C/">Linux应用编程手册</a>
+                        
+                    </div>
+                
+                <div class="article-prev-next">
+                    
+                        <a href="/posts/524123629.html" class="prev-prefix">« </a> 上一篇：    <a href="/posts/524123629.html" title="发布于 2024-03-31 03:28">个人笔记</a>
+                        <br>
+                    
+                    
+                        <a href="/posts/2867551922.html" class="next-prefix">» </a> 下一篇：    <a href="/posts/2867551922.html" title="发布于 2024-03-31 12:30">移植ubuntu</a>
+                    
+                </div>
+            </div>
+            
+    <div class="article-comments">
+        
+            <div class="comments-title">
+                评论列表
+            </div>
+        
+        <div class="comments-content"></div>
+    </div>
+    
+ 
+        </div>
+    
+</div>
+    <div id="footer">
+    <div><span class='face'>ღゝ◡╹)ノ♡</span></div><div>【人生若只如初见<span><i class='iconfont icon-like-fill'></i></span>何事秋风悲画扇】</div><div>&copy; 2020-2023 WorstOne. All Rights Reserved.</div>
+</div>
+    <div id="sidebar">
+    <div class="menu-wrap" style="display:none;">
+        
+            <div class="menu-notice">
+                <span class="iconfont icon-notice"></span>
+                <div class="notice">
+                    <span>简单地活着，肆意而又精彩！</span>
+                </div>
+            </div>
+        
+        <nav class="menu">
+            <div class="menu-introduce"> 
+                <div class="introduce-avatar">
+                    <img src="/image/sidebar/avatar.jpg">
+                </div> 
+                <div class="introduce-info"> 
+                    <div class="introduce-user">
+                        
+                            <a href="javascript:;" target="_blank"><span>Liu For Code</span></a>
+                        
+                    </div>
+                </div> 
+            </div> 
+            <div class="menu-list">
+                <ul>
+                    
+                        <li class=""><a href="/" class="" target="_self"><span class="iconfont icon-home-fill"></span>首页</a></li>
+                    
+                        <li class=""><a href="/category" class="" target="_self"><span class="iconfont icon-folder-fill"></span>分类</a></li>
+                    
+                        <li class=""><a href="/tag" class="" target="_self"><span class="iconfont icon-discount-fill"></span>标签</a></li>
+                    
+                        <li class=""><a href="/archive" class="" target="_self"><span class="iconfont icon-calendar-fill"></span>归档</a></li>
+                    
+                        <li class=""><a href="/donate" class="" target="_self"><span class="iconfont icon-heart-fill"></span>赞赏</a></li>
+                    
+                        <li class=""><a href="/about" class="" target="_self"><span class="iconfont icon-about-fill"></span>关于</a></li>
+                    
+                        <li class=""><a href="/atom.xml" class="" target="_blank"><span class="iconfont icon-rss"></span>订阅</a></li>
+                    
+                        <li class=""><a href="javascript:;" class="search" target="_self"><span class="iconfont icon-search-menu"></span>搜索</a></li>
+                    
+                        <li class=""><a href="/comment" class="" target="_self"><span class="iconfont icon-comments-fill"></span>留言板</a></li>
+                    
+                        <li class=""><a href="/friend" class="" target="_self"><span class="iconfont icon-link"></span>友情链接</a></li>
+                    
+                </ul> 
+            </div> 
+            <div class="menu-link">
+                <div class="box">
+                    <div class="image-box"></div>
+                </div>
+                
+                    <a name="知乎" href="https://www.zhihu.com/people/wo-deng-ni-99-59" class="" target="_blank" data=""><span class="iconfont icon-zhihu"></span></a>
+                
+                    <a name="QQ" href="javascript:;" class="image" target="_self" data="/image/sidebar/qq.jpg"><span class="iconfont icon-qq"></span></a>
+                
+                    <a name="Gitee" href="https://gitee.com/Liu-sgr" class="" target="_blank" data=""><span class="iconfont icon-gitee"></span></a>
+                
+                    <a name="GitHub" href="https://github.com/Liu-sgr" class="" target="_blank" data=""><span class="iconfont icon-github"></span></a>
+                
+            </div> 
+        </nav>
+        <button class="menu-button-close"></button>
+        <div class="morph-shape" id="morph-shape" data-morph-open="M-7.312,0H15c0,0,66,113.339,66,399.5C81,664.006,15,800,15,800H-7.312V0z;M-7.312,0H100c0,0,0,113.839,0,400c0,264.506,0,400,0,400H-7.312V0z">
+            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 800" preserveAspectRatio="none">
+                <path d="M-7.312,0H0c0,0,0,113.839,0,400c0,264.506,0,400,0,400h-7.312V0z"/>
+            </svg>
+        </div>
+    </div>
+    <button class="menu-button-open">MENU</button>
+    <div class="menu-cover"></div>
+</div>
+    <link type="text/css" rel="stylesheet" href="/css/search.css">
+<script type="text/javascript" src="/js/iscroll.js"></script>
+<script type="text/javascript" src="/js/instantsearch.min.js"></script>
+<div class="search-window">
+    <div class="search-content">
+        <div class="search-content-icon">
+            <i class="iconfont icon-search"></i>
+        </div>
+        <div id="search-input" class="search-input"></div>
+    </div>
+
+    <div class="search-scroll">
+        <div class="search-result">
+            <div id="search-stats" class="search-stats"></div>
+            <div id="search-hits"></div>
+            <div id="search-pagination" class="search-pagination"></div>
+        </div>
+    </div>
+
+    <span class="search-close-icon">
+        <i class="iconfont icon-close"></i>
+    </span>
+</div>
+    <div id="tools">
+    <div class="progressbar-top"></div>
+    
+    <link type="text/css" rel="stylesheet" href="/css/APlayer.css">
+    <script type="text/javascript" src="/js/APlayer.min.js"></script>
+    <script type="text/javascript" src="/js/Meting.min.js"></script>
+    <script>
+        var meting_api = 'https://api.i-meto.com/meting/api?server=:server&type=:type&id=:id&auth=:auth&r=:r';
+    </script>
+    <meting-js id="3778678" lrcshow="false" server="netease" type="playlist" fixed="true" autoplay="false" loop="all" order="random" preload="auto" volume="0.67" mutex="true"></meting-js>
+
+    <div class="wrap-right">
+    <div class="wrap-right-hide">
+         <div class="wrap-right-button favorites">
+            <div class="iconbox" switch="false">
+                <span class="iconfont icon-favorites"></span>
+            </div>
+            <span class="icontext">关注</span>
+         </div>
+        <div class="wrap-right-button search">
+            <div class="iconbox">
+                <span class="iconfont icon-search-menu"></span>
+            </div>
+            <span class="icontext">搜索</span>
+        </div>
+        <div class="wrap-right-button menu-button">
+            <div class="iconbox">
+                <span class="iconfont icon-menu"></span>
+            </div>
+            <span class="icontext">菜单</span>
+        </div>
+        <div class="wrap-right-button mode">
+            <div class="light">
+                <div class="iconbox">
+                    <span class="iconfont icon-daymode"></span>
+                </div>
+                <span class="icontext">浅色模式</span>
+            </div>
+            <div class="dark">
+                <div class="iconbox">
+                    <span class="iconfont icon-nightmode-fill"></span>
+                </div>
+                <span class="icontext">深色模式</span>
+            </div>
+        </div>
+        <div class="wrap-right-button bottom">
+            <div class="iconbox">
+                <span class="iconfont icon-top"></span>
+            </div>
+            <span class="icontext">跳至底部</span>
+        </div>
+    </div>
+    <div class="wrap-right-show">
+        <div class="wrap-right-button set">
+            <div class="iconbox">
+                <span class="iconfont icon-setting"></span>
+            </div>
+            <span class="icontext">设置</span>
+        </div>
+        <div class="wrap-right-button top">
+            <div class="iconbox">
+                <span class="iconfont icon-top"></span>
+            </div>
+            <span class="icontext">返回顶部</span>
+        </div>
+    </div>
+</div>
+    <div class="loading"></div>
+</div>
+    <script>
+    window.config = {
+        GitHubUserName     : "Liu-sgr",
+        GitHubRepositories : "Liu For Code",
+
+        User             : "Liu For Code",
+        UserAvatar       : "/image/sidebar/avatar.jpg",
+        WebsiteStartDate : "2024-02-26",
+        Home             : "javascript:;",
+
+        WebsiteTitleBlur         : "(◍´꒳`◍) Hi, Liu For Code",
+        WebsiteTitleBlurTimeOut  : 500,
+        WebsiteTitleFocus        : "(*´∇｀*) 欢迎回来!",
+        WebsiteTitleFocusTimeOut : 1000,
+        WebsiteFavicon           : {
+            light : "/image/website/logo/logo.png",
+            dark  : "/image/website/logo/logo-dark.png"
+        },
+
+        ProgressBar : {
+            id       : "topProgressBar",
+            color    : "#77B6FF",
+            height   : "2px",
+            duration : 0.2
+        },
+
+        Loading: {
+            rebound : {
+                tension  : 16,
+                friction : 5
+            },
+            spinner : {
+                id     : "spinner",
+                radius : 90,
+                sides  : 3,
+                depth  : 4,
+                colors : {
+                    background : "#F0F0F0",
+                    stroke     : "#272633",
+                    base       : "",
+                    child      : "#272633"
+                },
+                alwaysForward : true,
+                restAt        : 0.5,
+                renderBase    : false
+            }
+        },
+
+        HomeHeaderAnimationRendered : true,
+        HomeHeaderAnimation         : {
+            radius      : 15,
+            density     : 0.2,
+            color       : "rgba(255, 255, 255, .2)",
+            clearOffset : 0.3
+        },
+
+        BackAnimationRendered          : true,
+        IEBrowserBackAnimationRendered : false,
+        BackAnimation                  : {
+            colorSaturation  : "60%",
+            colorBrightness  : "50%",
+            colorAlpha       : 0.5,
+            colorCycleSpeed  : 5,
+            verticalPosition : "random",
+            horizontalSpeed  : 200,
+            ribbonCount      : 3,
+            strokeSize       : 0,
+            parallaxAmount   : -0.2,
+            animateSections  : true
+        },
+
+        HomeHeaderImage : [
+            
+                "/image/header/home.jpg",
+            
+                "/image/header/home.jpeg",
+            
+                "/image/header/back.png",
+            
+        ],
+        HomeBannerText  : "",
+
+        ArticleHeaderImage : [
+            
+                "/image/header/article.jpg",
+            
+                "/image/header/back.jpg",
+            
+                "/image/header/back.jpeg",
+            
+        ],
+
+        OtherBannerText : "",
+
+        Error : {
+            icon    : "icon-swimming",
+            title   : "PAGE NOT FOUND",
+            content : [
+                
+                    "很抱歉，您访问的页面不存在！",
+                
+                    "可能是输入地址有误或该地址已变更。",
+                
+            ],
+            buttons : [
+                
+                    {
+                        icon  : "icon-home",
+                        text  : "返回首页",
+                        href  : "/",
+                        class : ""
+                    },
+                
+            ]
+        },
+
+        MenuNotice : {
+            enable : true,
+            notice : "简单地活着，肆意而又精彩！",
+            speed  : 20
+        },
+        MenuList : [
+            
+                {
+                    name   : "首页",
+                    icon   : "icon-home-fill",
+                    href   : "/",
+                    type   : "index",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "分类",
+                    icon   : "icon-folder-fill",
+                    href   : "/category",
+                    type   : "category",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "标签",
+                    icon   : "icon-discount-fill",
+                    href   : "/tag",
+                    type   : "tag",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "归档",
+                    icon   : "icon-calendar-fill",
+                    href   : "/archive",
+                    type   : "archive",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "赞赏",
+                    icon   : "icon-heart-fill",
+                    href   : "/donate",
+                    type   : "donate",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "关于",
+                    icon   : "icon-about-fill",
+                    href   : "/about",
+                    type   : "about",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "订阅",
+                    icon   : "icon-rss",
+                    href   : "/atom.xml",
+                    type   : "",
+                    class  : "",
+                    target : "_blank"
+                },
+            
+                {
+                    name   : "搜索",
+                    icon   : "icon-search-menu",
+                    href   : "javascript:;",
+                    type   : "",
+                    class  : "search",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "留言板",
+                    icon   : "icon-comments-fill",
+                    href   : "/comment",
+                    type   : "comment",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "友情链接",
+                    icon   : "icon-link",
+                    href   : "/friend",
+                    type   : "friend",
+                    class  : "",
+                    target : "_self"
+                },
+            
+        ],
+        MenuLink : [
+            
+                
+                    {
+                        name   : "知乎",
+                        icon   : "icon-zhihu",
+                        href   : "https://www.zhihu.com/people/wo-deng-ni-99-59",
+                        class  : "",
+                        target : "_blank",
+                        image  : ""
+                    },
+                
+                    {
+                        name   : "QQ",
+                        icon   : "icon-qq",
+                        href   : "javascript:;",
+                        class  : "image",
+                        target : "_self",
+                        image  : "/image/sidebar/qq.jpg"
+                    },
+                
+                    {
+                        name   : "Gitee",
+                        icon   : "icon-gitee",
+                        href   : "https://gitee.com/Liu-sgr",
+                        class  : "",
+                        target : "_blank",
+                        image  : ""
+                    },
+                
+                    {
+                        name   : "GitHub",
+                        icon   : "icon-github",
+                        href   : "https://github.com/Liu-sgr",
+                        class  : "",
+                        target : "_blank",
+                        image  : ""
+                    },
+                
+            
+        ],
+
+        FooterStyle : 2,
+        BottomText  : "<div><span class='face'>ღゝ◡╹)ノ♡</span></div><div>【人生若只如初见<span><i class='iconfont icon-like-fill'></i></span>何事秋风悲画扇】</div><div>&copy; 2020-2023 WorstOne. All Rights Reserved.</div>",
+
+        ConsoleList : [
+            
+                
+                    [
+                        
+                            
+                                "Based on cnblogs theme SimpleMemory.",
+                            
+                                "",
+                            
+                        
+                    ],
+                
+                    [
+                        
+                            
+                                "SimpleMemory Author:",
+                            
+                                "BNDong",
+                            
+                        
+                    ],
+                
+                    [
+                        
+                            
+                                "Theme:",
+                            
+                                "Liu For Code",
+                            
+                        
+                    ],
+                
+            
+        ],
+
+        FontIconExtend : "",
+
+        Donate : {
+            paypal  : "",
+            bitcoin : "",
+            alipay  : "/image/donate/alipay.png",
+            wechat  : "/image/donate/wechat.png"
+        },
+
+        Search : {
+            applicationID : "010C3EANT8",
+            apiKey        : "c7abab9f11b79102b9aff7fe6d41447d",
+            indexName     : "Notes",
+            hits          : {
+                page : 10
+            },
+            labels        : {
+                placeholder : "搜索",
+                empty       : "未发现与 「${query}」 相关的内容",
+                stats       : "${hits} 条相关条目，使用了 ${time} 毫秒",
+            }
+        }, 
+
+        Comment : {
+            switch : true,
+            type   : "Valine",
+        },
+
+        Waline : {
+            el              : ".comments-content",
+            serverURL       : "",
+            path            : window.location.pathname,
+            meta            : "['nick', 'mail', 'link']",
+            requiredMeta    : "['nick', 'mail']",
+            pageSize        : 10,
+            lang            : "zh-cn",
+            locale: {
+                admin       : "博主",
+                anonymous   : "匿名用户",
+                sofa        : "快来做第一个评论的人吧 ~",
+                placeholder : "你是我一生只会遇见一次的惊喜...",
+            },
+            dark            : "html[color-scheme='dark']",
+            search          : false,
+            pageview        : true,
+            comment         : true,
+            copyright       : false,
+        },
+
+        Valine : {
+            el             : ".comments-content",
+            appId          : "srhKtvWPQTWYKh3qX8G8M7v0-gzGzoHsz",
+            appKey         : "8uVSP1q6UlALVC5igYfIfv2h",
+            serverURLs     : "",
+            placeholder    : "你是我一生只会遇见一次的惊喜...",
+            avatar         : "mm",
+            meta           : "nick,mail,link",
+            requiredFields : "nick,mail",
+            pageSize       : 5,
+            lang           : "zh-cn",
+            visitor        : true,
+            enableQQ       : true
+        },
+
+        Tocbot : {
+            switch                : true,
+            tocSelector           : ".toc",
+            contentSelector       : ".article-body",
+            headingSelector       : "h1, h2, h3, h4, h5",
+            headingsOffset        : 0,
+            scrollSmooth          : true,
+            scrollSmoothOffset    : -5,
+            positionFixedSelector : ".toc",
+            positionFixedClass    : "toc-fixed",
+            fixedSidebarOffset    : "",
+        },
+
+        Require : {
+            baseUrl     : "/js/",
+            waitSeconds : 100
+        },
+
+        Music : {
+            type : "Meting"
+        },
+        APlayer : {
+            container : ".aplayer",
+            fixed     : true,
+            autoplay  : false,
+            loop      : "all",
+            order     : "random",
+            preload   : "auto",
+            volume    : 0.67,
+            mutex     : true,
+            lrcType   : 3,
+            audio     : [
+                
+                    {
+                        name   : "Endless Tears",
+                        artist : "CLIFF EDGE",
+                        cover  : "/music/cover/Endless Tears.jpg",
+                        url    : "/music/song/Endless Tears.mp3",
+                        lrc    : "/music/lrc/Endless Tears.lrc"
+                    },
+                
+            ]
+        },
+        Meting : {
+            api      : "https://api.i-meto.com/meting/api",
+            id       : "3778678", 
+            lrcshow  : false, 
+            server   : "netease", 
+            type     : "playlist", 
+            fixed    : true, 
+            autoplay : false, 
+            loop     : "all", 
+            order    : "random", 
+            preload  : "auto", 
+            volume   : 0.67, 
+            mutex    : true
+        },
+
+        Mouse : {
+            enable  : true,
+            options : {
+                size  : 6,
+                sizeF : 24
+            }
+        },
+
+        LazyLoad : {
+            default : "/image/website/lazyload.svg"
+        },
+  
+        Style : {
+            aplayer          : "/css/APlayer.css",
+            archive          : "/css/archive.css",
+            base             : "/css/base.css",
+            clipboard        : "/css/clipboard.css",
+            code             : "/css/code.css",
+            donate           : "/css/donate.css",
+            fancybox         : "/css/jquery.fancybox.css",
+            footer           : "/css/footer.css",
+            iconfont         : "/iconfont/iconfont.css",
+            index            : "/css/index.css",
+            menuBubble       : "/css/menu-bubble.css",
+            mouse            : "/css/mouse.css",
+            page             : "/css/page.css",
+            post             : "/css/post.css",
+            search           : "/css/search.css",
+            tocbot           : "/css/tocbot.css",
+            valine           : "/css/valine.css",
+            waline           : "/css/waline.css",
+            walineCustom     : "/css/waline-custom.css"
+        },
+
+        Script: {
+            aplayer          : "/js/APlayer.min.js",
+            config           : "/js/require.config.js",
+            index            : "/js/index.js",
+            instantSearch    : "/js/instantsearch.min.js",
+            iscroll          : "/js/iscroll.js",
+            jQuery           : "/js/jquery-3.4.1.min.js",
+            loading          : "/js/loading.js",
+            meting           : "/js/Meting.min.js",
+            require          : "/js/require.min.js",
+            waline           : "/js/waline.mjs",
+            pageview         : "/js/pageview.mjs",
+            comment          : "/js/comment.mjs",
+        },
+
+        Font: {
+            LongCang    : "/font/LongCang.css",
+            Monda       : "/font/Monda.css",
+            NotoSansSC  : "/font/NotoSansSC.css",
+            NotoSerifSC : "/font/NotoSerifSC.css",
+            Playball    : "/font/Playball.css",
+            PTMono      : "/font/PTMono.css",
+            Roboto      : "/font/Roboto.css",
+            RobotoSlab  : "/font/RobotoSlab.css",
+            Rosario     : "/font/Rosario.css",
+            UbuntuMono  : "/font/UbuntuMono.css"
+        },
+
+        Suffix : {
+            about : "简单地活着, 肆意又精彩."
+        },
+            
+        Theme : {
+            url  : "https://github.com/first19326/Hexo-LiveForCode",
+            name : "Hexo - Live For Code"
+        }  
+    };
+</script>
+    <script type="text/javascript" src="/js/index.js"></script>
+</body>
+</html>

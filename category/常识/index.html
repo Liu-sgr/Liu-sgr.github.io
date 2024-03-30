@@ -9,7 +9,7 @@
     <meta http-equiv="Cache-Control" content="no-siteapp">
     <title>
         
-            移植ubuntu
+            分类 - 常识
         
     </title>
     <link rel="shortcut icon" href="#"/>
@@ -32,40 +32,15 @@
 <meta name="generator" content="Hexo 7.1.1"></head>
 <body>
     <a id="cover"></a>
-    <link type="text/css" rel="stylesheet" href="/css/post.css">
+    <link type="text/css" rel="stylesheet" href="/css/archive.css">
 <div id="header" class="header">
     <div class="vertical">
         <div class="inner">
             
-                <h1 class="header-subtitle">移植ubuntu</h1>
+                <h1 class="header-subtitle">分类归档</h1>
                 <div class="header-subinfo">
-                    <p class="article-info-text">
-                        <span>
-                            <i class="iconfont icon-time"></i> 发表时间：2024-03-31
-                        </span>
-                        
-                            
-                                <span id="/posts/2867551922.html" class="leancloud_visitors" data-flag-title="移植ubuntu">
-                                    <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                                </span>
-                            
-                            
-                                <span>
-                                    <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/posts/2867551922.html"></span>
-                                </span>
-                              
-                        
-                    </p>
-                    
-                        
-                            <span class="category-color">移植</span>
-                        
-                    
-                    
-                        
-                            <span class="tag-color">移植ubuntu</span>
-                        
-                    
+                    <p class="article-info-text Chinese"></p>
+                    <p class="article-info-text English"></p>                  
                 </div>
             
         </div>
@@ -74,122 +49,37 @@
 </div>
 <div id="container">
     
-        <!-- 文章页面 -->
-        <div id="article">
-            <div class="toc"></div>
-            <div class="article-body">
-                <h2 id="ubuntu下载"><a href="#ubuntu下载" class="headerlink" title="ubuntu下载"></a>ubuntu下载</h2><p>选择 <a target="_blank" rel="noopener" href="https://cdimage.ubuntu.com/">ubuntu-base -arm64</a></p>
-<h2 id="ubuntu-编译"><a href="#ubuntu-编译" class="headerlink" title="ubuntu 编译"></a>ubuntu 编译</h2><p>解压ubuntu-base-20.04.3-base-arm64.tar.gz</p>
-<p>进入ubuntu-base-20.04.3-base-arm64 </p>
-<p>添加fstab文件到etc&#x2F; 内容：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">proc		/proc		proc	defaults	<span class="number">0</span>	<span class="number">0</span></span><br><span class="line">sysfs		/sys		sysfs	defaults	<span class="number">0</span>	<span class="number">0</span></span><br><span class="line">tmpfs		/dev		tmpfs	defaults	<span class="number">0</span>	<span class="number">0</span></span><br></pre></td></tr></table></figure>
-
-<p>附启动路径：&#x2F;sbin &#x2F;init -&gt;&#x2F;etc&#x2F;inittab  -&gt;&#x2F;etc&#x2F;init.d&#x2F;rcS </p>
-<p>&#x2F;etc&#x2F;fstab是用来存放文件系统的静态信息的文件. 当系统启动的时候，系统会自动地从这个文件读取信息，并且会自动将此文件中指定的文件系统挂载到指定的目录</p>
-<p>添加busybox可执行文件</p>
-<p>制作ubuntu文件系统：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/zero of=./ubuntu_ss928_rootfs.ext4 bs=1M count=1024</span><br><span class="line">mkfs.ext4 -d ubuntu-base-20.04.3-base-arm64 ubuntu_ss928_rootfs.ext4</span><br></pre></td></tr></table></figure>
-
-<h2 id="配置环境变量-指定启动初始化路径"><a href="#配置环境变量-指定启动初始化路径" class="headerlink" title="配置环境变量,指定启动初始化路径"></a>配置环境变量,指定启动初始化路径</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">setenv bootargs <span class="string">&#x27;mem=512M console=ttyAMA0,115200 clk_ignore_unused root=/dev/mmcblk0p3 rootfstype=ext4 rw rootwait blkdevparts=mmcblk0:1M(boot),12M(kernel),-(rootfs)&#x27;</span>;</span><br><span class="line">setenv bootcmd <span class="string">&#x27;mmc read 0 0x42000000 0x800 0x6000;bootm 0x42000000&#x27;</span>;</span><br><span class="line">setenv bootargs <span class="string">&quot;<span class="variable">$&#123;bootargs&#125;</span> init=/bin/sh&quot;</span></span><br><span class="line">sa</span><br><span class="line"></span><br><span class="line">boot</span><br></pre></td></tr></table></figure>
-
-<h2 id="进入系统"><a href="#进入系统" class="headerlink" title="进入系统"></a>进入系统</h2><p>执行busybox sh</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./busybox sh</span><br></pre></td></tr></table></figure>
-
-<p>挂载上  &#x2F;etc&#x2F;fstab   </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount -a </span><br></pre></td></tr></table></figure>
-
-<p>&#x2F;proc  &#x2F;sys把系统设备的创设备文件  查一下 </p>
-<p>如果&#x2F;dev&#x2F;没有内容,增加上述内容</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/fstab  </span><br></pre></td></tr></table></figure>
-
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mdev - s</span><br></pre></td></tr></table></figure>
-
-<p>板子ip 配网络   </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./busybox ifconfig 192.168.137.2 <span class="comment">#这里使用的是共享网络</span></span><br></pre></td></tr></table></figure>
-
-<p>配置路由</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route add default gw 192.168.137.1 <span class="comment">#共享网络网关</span></span><br></pre></td></tr></table></figure>
-
-<p>配置 dns 服务器</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/resolv.cong</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nameserver 8.8.8.8</span><br></pre></td></tr></table></figure>
-
-<p>同步时间</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">date -s 2023/11/1 11:10</span><br></pre></td></tr></table></figure>
-
-<p>执行</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt update</span><br></pre></td></tr></table></figure>
-
-<p>需要安装的软件</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemd  vim  net-tools  udev  haveged</span><br></pre></td></tr></table></figure>
-
-<p>设置ubuntu密码</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">passwd</span><br></pre></td></tr></table></figure>
-
-<p>重启</p>
-<p>注：内核需要开启CGROUP，重新编译、烧录。</p>
-
-                
-                <p class="end">__END__</p>
-            </div>
-            <div class="article-footer">
-                <div class="suffix-box">
-    <div class="suffix-box-left">
-        <img src="/image/sidebar/avatar.jpg" alt="Liu For Code">
-    </div>
-    <div class="suffix-box-right">
-        <span class="suffix-box-title">文章作者：</span>Liu For Code
-        <br>
-        <span class="suffix-box-title">文章出处：</span><a href="/posts/2867551922.html" target="_blank">移植ubuntu</a>
-        <br>
-        <span class="suffix-box-title">作者签名：</span>简单地活着, 肆意又精彩.
-        <br>
-        <span class="suffix-box-title">关于主题：</span><a href="https://github.com/first19326/Hexo-LiveForCode" target="_blank">Hexo - Live For Code</a>
-        <br>
-        <span class="suffix-box-title">版权声明：</span>文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" title="BY-NC-SA" target="_blank">BY-NC-SA</a> 许可协议，转载请注明出处
-        <br>
-    </div>
-    <div style="clear: both;"></div>
-</div>
-                
-                    <div class="category">
-                        分类：
+        
+            <!-- 归档页面、分类归档页面、标签归档页面 -->
+            <div class="articles">
+                <div class="articles-wrap">
+                    <span class="archive-move-on"></span>
+                    <span class="archive-counter">
                         
-                            <a href="/category/%E7%A7%BB%E6%A4%8D/">移植</a>
+                            当前分类：<span class="category">常识</span>
                         
-                    </div>
-                
-                
-                    <div class="tag">
-                        标签：
-                        
-                            <a href="/tag/%E7%A7%BB%E6%A4%8Dubuntu/">移植ubuntu</a>
-                        
-                    </div>
-                
-                <div class="article-prev-next">
-                    
-                        <a href="/posts/2254430952.html" class="prev-prefix">« </a> 上一篇：    <a href="/posts/2254430952.html" title="发布于 2024-03-31 03:24">Linux应用编程手册</a>
-                        <br>
+                    </span>
                     
                     
-                        <a href="/posts/636681753.html" class="next-prefix">» </a> 下一篇：    <a href="/posts/636681753.html" title="发布于 2024-03-01 12:21">rv1126屏幕测试demo</a>
+                        
+                            <div class="archive-title">
+                                <h2 class="archive-year">2024</h2>
+                            </div>
+                            
+                           
+                        <div class="article">
+                            <div class="article-header">
+                                <h1 class="article-title"><a href="/posts/524123629.html"><span>个人笔记</span></a></h1>
+                                <div class="article-meta">
+                                    <span class="article-time">03-31</span>
+                                </div>
+                            </div>
+                        </div>
                     
                 </div>
             </div>
             
-    <div class="article-comments">
         
-            <div class="comments-title">
-                评论列表
-            </div>
-        
-        <div class="comments-content"></div>
-    </div>
-    
- 
-        </div>
     
 </div>
     <div id="footer">
